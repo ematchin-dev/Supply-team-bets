@@ -1,0 +1,1874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supply Team Bets — Value View | FBP Review March 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --grpn-green: #53a318;
+  --grpn-green-light: #e8f5d9;
+  --grpn-green-dark: #3d7a12;
+  --red: #dc2626;
+  --red-light: #fef2f2;
+  --yellow: #f59e0b;
+  --yellow-light: #fffbeb;
+  --blue: #2563eb;
+  --blue-light: #eff6ff;
+  --purple: #7c3aed;
+  --purple-light: #ede9fe;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: var(--gray-50); color: var(--gray-800); font-size: 13px; line-height: 1.5; }
+@media print {
+  .sidebar { display: none !important; }
+  .main { margin-left: 0 !important; }
+  body { background: #fff; font-size: 11px; }
+  .card { break-inside: avoid; box-shadow: none; border: 1px solid var(--gray-200); }
+  .section-tab { display: block !important; }
+  .tab-content { display: block !important; }
+}
+/* SIDEBAR */
+.sidebar {
+  position: fixed; top: 0; left: 0; width: 250px; height: 100vh;
+  background: var(--gray-900); color: #fff; overflow-y: auto; z-index: 100; padding: 0;
+}
+.sidebar-header { background: var(--grpn-green); padding: 18px 20px; }
+.sidebar-header h1 { font-size: 15px; font-weight: 800; letter-spacing: -0.3px; }
+.sidebar-header p { font-size: 10px; opacity: 0.9; margin-top: 3px; }
+.sidebar nav { padding: 8px 0; }
+.sidebar nav a {
+  display: block; padding: 7px 20px; color: var(--gray-400);
+  text-decoration: none; font-size: 11.5px; font-weight: 500;
+  border-left: 3px solid transparent; transition: all 0.15s; cursor: pointer;
+}
+.sidebar nav a:hover, .sidebar nav a.active { color: #fff; background: rgba(255,255,255,0.05); border-left-color: var(--grpn-green); }
+.sidebar nav .nav-section { padding: 10px 20px 3px; font-size: 9.5px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gray-500); font-weight: 700; }
+.main { margin-left: 250px; }
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, var(--gray-900) 0%, #1a2e0a 100%);
+  color: #fff; padding: 40px 48px 36px;
+}
+.hero h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.8px; }
+.hero .subtitle { font-size: 13px; color: var(--gray-400); margin-top: 4px; }
+.hero-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-top: 24px; }
+.hero-metric { background: rgba(255,255,255,0.06); border-radius: 8px; padding: 14px; border: 1px solid rgba(255,255,255,0.08); }
+.hero-metric .label { font-size: 10px; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px; }
+.hero-metric .value { font-size: 20px; font-weight: 700; margin-top: 3px; }
+.hero-metric .delta { font-size: 11px; margin-top: 2px; }
+.delta.positive { color: #4ade80; }
+.delta.negative { color: #f87171; }
+.delta.neutral { color: var(--yellow); }
+/* CONTENT */
+.content { padding: 28px 48px 80px; max-width: 1400px; }
+.section-header { display: flex; align-items: center; gap: 10px; margin: 32px 0 16px; padding-bottom: 10px; border-bottom: 2px solid var(--gray-200); }
+.section-header h2 { font-size: 20px; font-weight: 800; letter-spacing: -0.4px; }
+.section-num { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; background: var(--grpn-green); color: #fff; border-radius: 50%; font-size: 12px; font-weight: 800; flex-shrink: 0; }
+.badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+.badge-green { background: var(--grpn-green-light); color: var(--grpn-green-dark); }
+.badge-red { background: var(--red-light); color: var(--red); }
+.badge-yellow { background: var(--yellow-light); color: #92400e; }
+.badge-blue { background: var(--blue-light); color: var(--blue); }
+.badge-purple { background: var(--purple-light); color: var(--purple); }
+/* CARDS */
+.card { background: #fff; border-radius: 10px; padding: 20px 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 14px; border: 1px solid var(--gray-100); }
+.card-title { font-size: 13px; font-weight: 700; color: var(--gray-700); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+/* TABLES */
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+th { text-align: left; padding: 7px 8px; background: var(--gray-50); font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-500); border-bottom: 2px solid var(--gray-200); white-space: nowrap; }
+td { padding: 7px 8px; border-bottom: 1px solid var(--gray-100); }
+tr:hover td { background: var(--gray-50); }
+.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr.area-header td { background: var(--grpn-green-light); font-weight: 700; color: var(--grpn-green-dark); font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; }
+tr.subtotal td { background: var(--gray-100); font-weight: 700; border-top: 1px solid var(--gray-300); }
+tr.total-row td { background: var(--gray-900); color: #fff; font-weight: 700; }
+tr.total-row .variance-positive { color: #4ade80; }
+tr.total-row .variance-negative { color: #f87171; }
+tr.sub-line td { color: var(--gray-500); font-size: 11px; }
+tr.revenue-line td { color: var(--grpn-green-dark); }
+tr.sga-line td { color: var(--red); }
+tr.total-impact td { font-weight: 700; border-top: 2px solid var(--gray-300); }
+.variance-positive { color: var(--grpn-green); font-weight: 600; }
+.variance-negative { color: var(--red); font-weight: 600; }
+.variance-neutral { color: var(--gray-500); font-weight: 500; }
+/* STATUS CIRCLES */
+.status-circle { display: inline-block; width: 13px; height: 13px; border-radius: 50%; flex-shrink: 0; }
+.status-green { background: var(--grpn-green); }
+.status-yellow { background: var(--yellow); }
+.status-red { background: var(--red); }
+.status-gray { background: var(--gray-400); }
+.status-wrap { display: flex; align-items: center; gap: 5px; }
+/* WATERFALL */
+.waterfall-container { overflow-x: auto; }
+.wf-chart { min-height: 280px; }
+/* SETTINGS */
+.settings-section { background: #fff; border-radius: 10px; border: 1px solid var(--gray-200); overflow: hidden; margin-bottom: 10px; }
+.settings-area-header { background: var(--gray-800); color: #fff; padding: 10px 16px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none; }
+.settings-area-header:hover { background: var(--gray-700); }
+.settings-area-body { display: none; }
+.settings-area-body.open { display: block; }
+.settings-bet-row { display: grid; grid-template-columns: 1fr 180px 180px; gap: 12px; align-items: center; padding: 8px 16px; border-bottom: 1px solid var(--gray-100); }
+.settings-bet-row:last-child { border-bottom: none; }
+.settings-bet-row:hover { background: var(--gray-50); }
+.settings-bet-name { font-size: 12px; color: var(--gray-700); }
+.toggle-group { display: flex; border: 1px solid var(--gray-200); border-radius: 6px; overflow: hidden; font-size: 11px; }
+.toggle-btn { flex: 1; padding: 4px 8px; background: none; border: none; cursor: pointer; font-size: 10.5px; font-weight: 600; transition: all 0.15s; text-align: center; }
+.toggle-btn.active-include { background: var(--grpn-green-light); color: var(--grpn-green-dark); }
+.toggle-btn.active-exclude { background: var(--red-light); color: var(--red); }
+.toggle-btn:not(.active-include):not(.active-exclude) { color: var(--gray-400); }
+.settings-col-header { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--gray-500); letter-spacing: 0.5px; text-align: center; }
+/* GRID */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+/* FILTER BAR */
+.filter-bar { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+.filter-label { font-size: 11px; font-weight: 600; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.5px; }
+.filter-toggle { display: flex; border: 1.5px solid var(--gray-300); border-radius: 6px; overflow: hidden; }
+.filter-toggle button { padding: 5px 12px; background: none; border: none; cursor: pointer; font-size: 11px; font-weight: 600; color: var(--gray-500); transition: all 0.15s; }
+.filter-toggle button.active { background: var(--grpn-green); color: #fff; }
+.insight-card { background: #fff; border-radius: 8px; padding: 16px; border-left: 4px solid var(--grpn-green); box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 10px; }
+.insight-card.warning { border-left-color: var(--red); }
+.insight-card.caution { border-left-color: var(--yellow); }
+.insight-card.info { border-left-color: var(--blue); }
+.insight-card h4 { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+.insight-card p { font-size: 12px; color: var(--gray-600); }
+.pill { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+.pill-green { background: var(--grpn-green-light); color: var(--grpn-green-dark); }
+.pill-red { background: var(--red-light); color: var(--red); }
+.pill-yellow { background: var(--yellow-light); color: #92400e; }
+.pill-blue { background: var(--blue-light); color: var(--blue); }
+.pill-gray { background: var(--gray-100); color: var(--gray-600); }
+.commentary-tag { font-size: 10px; color: var(--gray-500); font-style: italic; max-width: 200px; line-height: 1.3; }
+/* SECTION TABS */
+.section-tabs { display: flex; gap: 0; margin-bottom: 0; border-bottom: 2px solid var(--gray-200); }
+.section-tabs button { padding: 9px 16px; background: none; border: none; cursor: pointer; font-size: 12px; font-weight: 600; color: var(--gray-500); border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.15s; }
+.section-tabs button.active { color: var(--grpn-green-dark); border-bottom-color: var(--grpn-green); }
+.section-tabs button:hover { color: var(--gray-800); }
+.tab-panel { display: none; padding-top: 16px; }
+.tab-panel.active { display: block; }
+/* WATERFALL BARS */
+.wf-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.wf-label { width: 200px; font-size: 11px; color: var(--gray-700); text-align: right; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wf-bar-wrap { flex: 1; display: flex; align-items: center; position: relative; height: 26px; }
+.wf-bar { height: 20px; border-radius: 3px; transition: width 0.3s; }
+.wf-val { font-size: 10.5px; font-weight: 700; margin-left: 5px; white-space: nowrap; }
+.wf-connector { position: absolute; height: 2px; background: var(--gray-300); }
+/* Area color coding */
+.area-AOG { color: #7c3aed; }
+.area-Coupons { color: #0891b2; }
+.area-HA { color: #059669; }
+.area-HBW { color: #d97706; }
+.area-INTL { color: #6366f1; }
+.area-Live { color: #db2777; }
+.area-Online { color: #2563eb; }
+.area-TTD { color: #0f766e; }
+.area-Travel { color: #c2410c; }
+tr.bet-detail td { font-size: 11.5px; }
+.area-badge { display: inline-block; padding: 1px 7px; border-radius: 12px; font-size: 10px; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-header">
+    <h1>Supply Team Bets Review</h1>
+    <p>FBP · Senior Leadership · March 2026</p>
+  </div>
+  <nav>
+    <div class="nav-section">Sections</div>
+    <a onclick="showSection('s1')" style="color:var(--yellow);">1. Approved vs Pending</a>
+    <a onclick="showSection('s2')">2. Summary by Area</a>
+    <a onclick="showSection('s3')">3. Bet Detail + Status</a>
+    <a onclick="showSection('s4')">4. Iteration Comparison</a>
+    <a onclick="showSection('s5')">5. Jan/Feb Actuals</a>
+    <a onclick="showSection('s6')">6. Waterfall Bridges</a>
+    <a onclick="showSection('s7')">7. Settings</a>
+    <div class="nav-section">Filters</div>
+    <a onclick="showSection('s7')">⚙ Inclusion Settings</a>
+  </nav>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="hero">
+    <h1>📊 Supply Team Bets — Value View</h1>
+    <p class="subtitle">FBP Prepared · Senior Leadership Review · March 2026 | All figures in USD</p>
+    <div class="hero-metrics" id="heroMetrics">
+      <div class="hero-metric"><div class="label">Total FY26 Revenue</div><div class="value" id="h-rev">–</div><div class="delta positive">QF2 Forecast</div></div>
+      <div class="hero-metric"><div class="label">Total FY26 SG&A</div><div class="value" id="h-sga">–</div><div class="delta neutral">Cost Impact</div></div>
+      <div class="hero-metric"><div class="label">Net FY26 Impact</div><div class="value" id="h-net">–</div><div class="delta positive">Rev – SG&A</div></div>
+      <div class="hero-metric"><div class="label">Total FY27 Revenue</div><div class="value" id="h-rev27">–</div><div class="delta positive">Forward Look</div></div>
+      <div class="hero-metric"><div class="label">Active Bets</div><div class="value" id="h-bets">–</div><div class="delta neutral">Included in Summary</div></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- OP FILTER -->
+    <div class="filter-bar" style="background:#fff;padding:12px 16px;border-radius:8px;border:1px solid var(--gray-200);margin-bottom:20px;">
+      <span class="filter-label">🔍 Revenue OP Filter:</span>
+      <span style="font-size:11px;color:var(--gray-600);">Included in OP26 Baseline?</span>
+      <div class="filter-toggle">
+        <button id="opAll" class="active" onclick="setOpFilter('all')">All Revenue</button>
+        <button id="opYes" onclick="setOpFilter('Yes')">In OP Only (Yes)</button>
+        <button id="opNo" onclick="setOpFilter('No')">Not in OP Only (No)</button>
+      </div>
+      <span style="font-size:11px;color:var(--gray-500);font-style:italic;">Coupons has both Yes/No split — all other areas are 100% "No" (not in OP)</span>
+    </div>
+
+    <div class="filter-bar" style="background:#fff;padding:12px 16px;border-radius:8px;border:1px solid var(--gray-200);margin-bottom:20px;">
+      <span class="filter-label">✅ Approval Filter:</span>
+      <div class="filter-toggle">
+        <button id="apprAll" class="active" onclick="setApprovalFilter('all')">All Bets</button>
+        <button id="apprApproved" onclick="setApprovalFilter('approved')">Approved Only</button>
+      </div>
+      <span style="font-size:11px;color:var(--gray-500);font-style:italic;">Approval status can be edited in Settings (Section 6)</span>
+    </div>
+
+    <!-- ===== SECTION 1: SUMMARY BY AREA ===== -->
+    <!-- ===== SECTION 1: APPROVED vs PENDING SUMMARY ===== -->
+    <div id="s1" class="section-tab">
+      <div class="section-header">
+        <span class="section-num">1</span>
+        <h2>Approved vs Pending Approval — Impact Summary</h2>
+        <span class="badge badge-yellow">⚠ Significant Unapproved Impact</span>
+      </div>
+
+      <!-- KPI cards -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:20px;" id="approvalKPIs"></div>
+
+      <!-- Warning card -->
+      <div id="pendingWarning" class="insight-card caution" style="margin-bottom:16px;">
+        <h4>⚠ Material Pending Approval Risk</h4>
+        <p id="pendingWarningText">Loading...</p>
+      </div>
+
+      <!-- Two-column layout: Approved table + Pending table -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+        <div>
+          <div class="card-title" style="padding:12px 16px 0;font-size:13px;font-weight:800;color:var(--grpn-green-dark);">✅ Approved Bets</div>
+          <div class="card" style="padding:0;overflow:hidden;">
+            <table style="font-size:11.5px;" id="approvedTable">
+              <thead><tr>
+                <th>Bet Name</th>
+                <th class="num">FY26 Rev</th>
+                <th class="num">FY26 SG&A</th>
+                <th class="num">FY26 Net</th>
+                <th class="num">FY27 Net</th>
+              </tr></thead>
+              <tbody id="approvedBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <div class="card-title" style="padding:12px 16px 0;font-size:13px;font-weight:800;color:var(--yellow);">⏳ Pending Approval Bets</div>
+          <div class="card" style="padding:0;overflow:hidden;">
+            <table style="font-size:11.5px;" id="pendingTable">
+              <thead><tr>
+                <th>Bet Name</th>
+                <th class="num">FY26 Rev</th>
+                <th class="num">FY26 SG&A</th>
+                <th class="num">FY26 Net</th>
+                <th class="num">FY27 Net</th>
+              </tr></thead>
+              <tbody id="pendingBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top pending bets spotlight -->
+      <div class="section-header" style="margin-top:24px;">
+        <h2 style="font-size:16px;">🔍 Biggest Pending Bets — Decision Required</h2>
+      </div>
+      <div id="topPendingCards"></div>
+    </div>
+
+    <div id="s2" class="section-tab">
+      <div class="section-header">
+        <span class="section-num">2</span>
+        <h2>Summary by Area — Quarterly View</h2>
+        <span class="badge badge-green">QF2 — March 2026</span>
+      </div>
+      <div class="insight-card info" style="margin-bottom:16px;">
+        <h4>How to read this table</h4>
+        <p>Revenue = M1+VFM lines. SG&A = cost lines. Net Impact = Revenue − SG&A. Use Settings (Section 5) to include/exclude individual bets. Use the OP filter above for Coupons revenue split. Chart below shows net impact by area and quarter.</p>
+      </div>
+
+      <!-- QUARTERLY STACKED CHART -->
+      <div class="card" style="margin-bottom:18px;">
+        <div class="card-title">
+          📈 2026 Net Impact by Quarter — Area Breakdown
+          <span class="badge badge-green" style="margin-left:auto;">Net = Revenue + SG&A cost</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 220px;gap:20px;align-items:start;">
+          <div style="position:relative;height:280px;">
+            <canvas id="quarterlyChart"></canvas>
+          </div>
+          <div id="quarterlyLegend" style="padding-top:8px;"></div>
+        </div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div style="overflow-x:auto;">
+          <table id="summaryTable">
+            <thead>
+              <tr>
+                <th style="width:180px;">Area</th>
+                <th style="width:120px;">Line</th>
+                <th class="num">Q1 2026</th>
+                <th class="num">Q2 2026</th>
+                <th class="num">Q3 2026</th>
+                <th class="num">Q4 2026</th>
+                <th class="num" style="background:var(--gray-100);">FY 2026</th>
+                <th class="num" style="background:#e0f2fe;">FY 2027</th>
+              </tr>
+            </thead>
+            <tbody id="summaryBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SECTION 2: BET DETAIL ===== -->
+    <div id="s3" class="section-tab" style="display:none;">
+      <div class="section-header">
+        <span class="section-num">2</span>
+        <h2>Full Bet List — Detail with Status</h2>
+        <span class="badge badge-blue">QF2 Forecast + MBR Status</span>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div style="overflow-x:auto;">
+          <table id="detailTable">
+            <thead>
+              <tr>
+                <th style="width:40px;">Area</th>
+                <th style="width:220px;">Bet Name</th>
+                <th class="num">Rev FY26</th>
+                <th class="num">SG&A FY26</th>
+                <th class="num">Net FY26</th>
+                <th class="num">Rev FY27</th>
+                <th class="num">SG&A FY27</th>
+                <th class="num">Net FY27</th>
+                <th style="width:90px;text-align:center;">Status</th>
+                <th style="width:220px;">Status Commentary</th>
+              </tr>
+            </thead>
+            <tbody id="detailBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SECTION 3: COMPARISON ===== -->
+    <div id="s4" class="section-tab" style="display:none;">
+      <div class="section-header">
+        <span class="section-num">3</span>
+        <h2>QF2 vs OP Commitment — Forecast Comparison</h2>
+        <span class="badge badge-yellow">Variance Analysis</span>
+      </div>
+      <div class="insight-card caution" style="margin-bottom:16px;">
+        <h4>Legend</h4>
+        <p><span class="pill pill-blue">New Bet</span> = Not in OP Commitment &nbsp;|&nbsp; <span class="pill pill-yellow">Execution Delayed</span> = QF2 FY26 Revenue &lt; OP FY26 Revenue by &gt;10% &nbsp;|&nbsp; <span class="pill pill-red">Canceled</span> = In OP Commitment but not in QF2</p>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div style="overflow-x:auto;">
+          <table id="compareTable" style="min-width:1100px;font-size:11px;">
+            <thead>
+              <tr style="background:var(--gray-800);color:#fff;">
+                <th rowspan="2" style="width:150px;background:var(--gray-900);color:#fff;vertical-align:bottom;position:sticky;left:0;z-index:3;padding:6px 8px;">Bet Name</th>
+                <th rowspan="2" style="width:52px;background:var(--gray-900);color:#fff;vertical-align:bottom;padding:6px 4px;">Metric</th>
+                <th colspan="3" class="num" style="background:#1e3a5f;color:#bfdbfe;text-align:center;border-right:2px solid #374151;padding:5px 4px;">Q1 2026</th>
+                <th colspan="3" class="num" style="background:#1e3a5f;color:#bfdbfe;text-align:center;border-right:2px solid #374151;padding:5px 4px;">Q2 2026</th>
+                <th colspan="3" class="num" style="background:#1e3a5f;color:#bfdbfe;text-align:center;border-right:2px solid #374151;padding:5px 4px;">Q3 2026</th>
+                <th colspan="3" class="num" style="background:#1e3a5f;color:#bfdbfe;text-align:center;border-right:2px solid #374151;padding:5px 4px;">Q4 2026</th>
+                <th colspan="3" class="num" style="background:#14532d;color:#bbf7d0;text-align:center;border-right:2px solid #374151;padding:5px 4px;">FY 2026</th>
+                <th rowspan="2" style="width:90px;background:var(--gray-900);color:#fff;vertical-align:bottom;position:sticky;right:0;z-index:3;padding:6px 8px;">Tag</th>
+              </tr>
+              <tr style="background:var(--gray-700);color:#d1d5db;font-size:10px;">
+                <th class="num" style="background:#1e3a8a22;color:#93c5fd;padding:4px 5px;">OP</th>
+                <th class="num" style="background:#14532d22;color:#86efac;padding:4px 5px;">QF2</th>
+                <th class="num" style="border-right:2px solid #374151;padding:4px 5px;">Δ</th>
+                <th class="num" style="background:#1e3a8a22;color:#93c5fd;padding:4px 5px;">OP</th>
+                <th class="num" style="background:#14532d22;color:#86efac;padding:4px 5px;">QF2</th>
+                <th class="num" style="border-right:2px solid #374151;padding:4px 5px;">Δ</th>
+                <th class="num" style="background:#1e3a8a22;color:#93c5fd;padding:4px 5px;">OP</th>
+                <th class="num" style="background:#14532d22;color:#86efac;padding:4px 5px;">QF2</th>
+                <th class="num" style="border-right:2px solid #374151;padding:4px 5px;">Δ</th>
+                <th class="num" style="background:#1e3a8a22;color:#93c5fd;padding:4px 5px;">OP</th>
+                <th class="num" style="background:#14532d22;color:#86efac;padding:4px 5px;">QF2</th>
+                <th class="num" style="border-right:2px solid #374151;padding:4px 5px;">Δ</th>
+                <th class="num" style="background:#14532d33;color:#86efac;padding:4px 5px;">OP</th>
+                <th class="num" style="background:#14532d33;color:#86efac;font-weight:800;padding:4px 5px;">QF2</th>
+                <th class="num" style="border-right:2px solid #374151;padding:4px 5px;">Δ FY26</th>
+              </tr>
+            </thead>
+            <tbody id="compareBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SECTION 4: JAN/FEB ACTUALS ===== -->
+    <div id="s5" class="section-tab" style="display:none;">
+      <div class="section-header">
+        <span class="section-num">5</span>
+        <h2>January &amp; February — Actuals vs Plan</h2>
+        <span class="badge badge-yellow">Jan+Feb Combined · OP vs QF2 + MBR Commentary</span>
+      </div>
+      <div class="insight-card info" style="margin-bottom:16px;">
+        <h4>How to read this table</h4>
+        <p>Shows only bets with expected revenue in Jan or Feb 2026 (now actuals). Jan + Feb are combined into a single column. Variance = QF2 − OP. Commentary sourced from March MBR documents. Three sub-rows per bet: Revenue, SG&A, Net.</p>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div style="overflow-x:auto;">
+          <table style="min-width:900px;font-size:12px;">
+            <thead>
+              <tr style="background:var(--gray-800);color:#fff;">
+                <th style="width:200px;background:var(--gray-900);color:#fff;padding:7px 8px;">Bet Name</th>
+                <th style="width:60px;background:var(--gray-900);color:#fff;padding:7px 4px;">Metric</th>
+                <th style="text-align:right;padding:7px 6px;background:#1e3a8a33;color:#93c5fd;">OP (Jan+Feb)</th>
+                <th style="text-align:right;padding:7px 6px;background:#14532d33;color:#86efac;font-weight:800;">QF2 (Jan+Feb)</th>
+                <th style="text-align:right;padding:7px 6px;">Δ</th>
+                <th style="width:180px;padding:7px 8px;color:#9ca3af;">Commentary (from MBR)</th>
+              </tr>
+            </thead>
+            <tbody id="actualsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SECTION 5: WATERFALL ===== -->
+    <div id="s6" class="section-tab" style="display:none;">
+      <div class="section-header">
+        <span class="section-num">6</span>
+        <h2>Waterfall Bridge: OP Commitment → QF2 Commitment</h2>
+        <span class="badge badge-purple">FY 2026 Net Impact</span>
+      </div>
+      <div class="section-tabs" style="margin-bottom:0;">
+        <button class="active" onclick="showWfTab('wf-total')">Total</button>
+        <button onclick="showWfTab('wf-AOG')">AOG</button>
+        <button onclick="showWfTab('wf-Coupons')">Coupons</button>
+        <button onclick="showWfTab('wf-HA')">H&amp;A</button>
+        <button onclick="showWfTab('wf-HBW')">HBW</button>
+        <button onclick="showWfTab('wf-INTL')">INTL Core</button>
+        <button onclick="showWfTab('wf-Live')">Live</button>
+        <button onclick="showWfTab('wf-Online')">Online/Retail</button>
+        <button onclick="showWfTab('wf-TTD')">TTD</button>
+        <button onclick="showWfTab('wf-Travel')">Travel</button>
+      </div>
+      <div id="wf-total" class="tab-panel active">
+        <div class="card"><canvas id="chartTotal" height="90"></canvas></div>
+        <div id="wfTableTotal"></div>
+      </div>
+      <div id="wf-AOG" class="tab-panel"><div class="card"><canvas id="chartAOG" height="90"></canvas></div><div id="wfTableAOG"></div></div>
+      <div id="wf-Coupons" class="tab-panel"><div class="card"><canvas id="chartCoupons" height="90"></canvas></div><div id="wfTableCoupons"></div></div>
+      <div id="wf-HA" class="tab-panel"><div class="card"><canvas id="chartHA" height="90"></canvas></div><div id="wfTableHA"></div></div>
+      <div id="wf-HBW" class="tab-panel"><div class="card"><canvas id="chartHBW" height="90"></canvas></div><div id="wfTableHBW"></div></div>
+      <div id="wf-INTL" class="tab-panel"><div class="card"><canvas id="chartINTL" height="90"></canvas></div><div id="wfTableINTL"></div></div>
+      <div id="wf-Live" class="tab-panel"><div class="card"><canvas id="chartLive" height="90"></canvas></div><div id="wfTableLive"></div></div>
+      <div id="wf-Online" class="tab-panel"><div class="card"><canvas id="chartOnline" height="90"></canvas></div><div id="wfTableOnline"></div></div>
+      <div id="wf-TTD" class="tab-panel"><div class="card"><canvas id="chartTTD" height="90"></canvas></div><div id="wfTableTTD"></div></div>
+      <div id="wf-Travel" class="tab-panel"><div class="card"><canvas id="chartTravel" height="90"></canvas></div><div id="wfTableTravel"></div></div>
+    </div>
+
+    <!-- ===== SECTION 6: SETTINGS ===== -->
+    <div id="s7" class="section-tab" style="display:none;">
+      <div class="section-header">
+        <span class="section-num">7</span>
+        <h2>Settings — Bet Inclusion Control</h2>
+        <span class="badge badge-blue">Affects All Summaries</span>
+      </div>
+      <div class="insight-card info" style="margin-bottom:16px;">
+        <h4>How Settings Work</h4>
+        <p>Toggle each bet's Include/Exclude status for the <strong>QF2 (Current)</strong> and <strong>OP Commitment (Initial)</strong> independently. Changes instantly update all summaries, the detail table, comparison, and waterfall bridges. Green = Include, Red = Exclude.</p>
+      </div>
+      <div id="settingsContainer"></div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+// =============================================
+// DATA
+// =============================================
+const MARCH_RAW = [{"area":"Online/Retail","bet_name":"2026 Wishlists Online","op_include":"No","line_type":"revenue","q1":30100,"q2":97500,"q3":155600,"q4":367000,"fy26":650200,"fy27":1200000},{"area":"Online/Retail","bet_name":"2026 Wishlists Online","op_include":"Yes","line_type":"sga","q1":-98697,"q2":-98697,"q3":-98697,"q4":-98697,"fy26":-394788,"fy27":-394788},{"area":"Online/Retail","bet_name":"Enable Apple App\u2013Linked E-Learning Deals on iOS","op_include":"No","line_type":"revenue","q1":0,"q2":20001,"q3":20001,"q4":60000,"fy26":100002,"fy27":240000},{"area":"Online/Retail","bet_name":"Enable Apple App\u2013Linked E-Learning Deals on iOS","op_include":"Yes","line_type":"sga","q1":-20950,"q2":-20950,"q3":0,"q4":0,"fy26":-41900,"fy27":0},{"area":"Online/Retail","bet_name":"Customisable Private Label SignaturePrintLab","op_include":"No","line_type":"revenue","q1":4500,"q2":33500,"q3":42000,"q4":378000,"fy26":458000,"fy27":1512000},{"area":"Online/Retail","bet_name":"Customisable Private Label SignaturePrintLab","op_include":"Yes","line_type":"sga","q1":-20760,"q2":-20760,"q3":-10680,"q4":-10680,"fy26":-62880,"fy27":-42720},{"area":"Online/Retail","bet_name":"Sponsored Marketing Activities \u2013 Build a Profitable Process","op_include":"No","line_type":"revenue","q1":350000,"q2":250000,"q3":250000,"q4":450000,"fy26":1300000,"fy27":1800000},{"area":"Online/Retail","bet_name":"Sponsored Marketing Activities \u2013 Build a Profitable Process","op_include":"Yes","line_type":"sga","q1":-6040,"q2":-6540,"q3":0,"q4":0,"fy26":-12580,"fy27":0},{"area":"Coupons","bet_name":"Eliminate \u201cOccasional Drops\u201d in Coupons (SEO SOV Stability)","op_include":"No","line_type":"revenue","q1":0,"q2":0,"q3":50001,"q4":100002,"fy26":150003,"fy27":400002},{"area":"Coupons","bet_name":"Eliminate \u201cOccasional Drops\u201d in Coupons (SEO SOV Stability)","op_include":"Yes","line_type":"sga","q1":0,"q2":-6900,"q3":-6900,"q4":-6900,"fy26":-20700,"fy27":0},{"area":"Coupons","bet_name":"Move towards exclusive code agreements and click-less tracking","op_include":"No","line_type":"revenue","q1":0,"q2":0,"q3":12501,"q4":18750,"fy26":31251,"fy27":100002},{"area":"Coupons","bet_name":"Move towards exclusive code agreements and click-less tracking","op_include":"Yes","line_type":"sga","q1":0,"q2":-9300,"q3":-9600,"q4":-9600,"fy26":-28500,"fy27":0},{"area":"Coupons","bet_name":"PPC Supply","op_include":"No","line_type":"revenue","q1":0,"q2":3438,"q3":7176,"q4":13749,"fy26":24363,"fy27":55008},{"area":"Coupons","bet_name":"PPC Supply","op_include":"Yes","line_type":"sga","q1":0,"q2":-7500,"q3":-7500,"q4":-7500,"fy26":-22500,"fy27":0},{"area":"Coupons","bet_name":"Post Redemption Screen Optimization","op_include":"Yes","line_type":"revenue","q1":0,"q2":0,"q3":22011,"q4":50598,"fy26":72609,"fy27":465000},{"area":"Coupons","bet_name":"Post Redemption Screen Optimization","op_include":"No","line_type":"revenue","q1":0,"q2":0,"q3":30396,"q4":69882,"fy26":100278,"fy27":0},{"area":"Coupons","bet_name":"Post Redemption Screen Optimization","op_include":"Yes","line_type":"sga","q1":-5250,"q2":0,"q3":0,"q4":0,"fy26":-5250,"fy27":0},{"area":"Coupons","bet_name":"Automated Offer Quality Improvements (1)","op_include":"Yes","line_type":"revenue","q1":0,"q2":23626,"q3":94500,"q4":88500,"fy26":206626,"fy27":900000},{"area":"Coupons","bet_name":"Automated Offer Quality Improvements (1)","op_include":"No","line_type":"revenue","q1":0,"q2":32626,"q3":130350,"q4":122100,"fy26":285076,"fy27":0},{"area":"Coupons","bet_name":"Automated Offer Quality Improvements (1)","op_include":"Yes","line_type":"sga","q1":-12249,"q2":-8166,"q3":0,"q4":0,"fy26":-20415,"fy27":0},{"area":"Coupons","bet_name":"Ai Code Checker","op_include":"Yes","line_type":"revenue","q1":0,"q2":92683,"q3":84840,"q4":74113,"fy26":251636,"fy27":705840},{"area":"Coupons","bet_name":"Ai Code Checker","op_include":"No","line_type":"revenue","q1":0,"q2":127990,"q3":117237,"q4":102347,"fy26":347574,"fy27":0},{"area":"Coupons","bet_name":"Ai Code Checker","op_include":"Yes","line_type":"sga","q1":-1749,"q2":0,"q3":0,"q4":0,"fy26":-1749,"fy27":0},{"area":"Coupons","bet_name":"New Coupons Platform (UI)","op_include":"Yes","line_type":"revenue","q1":0,"q2":0,"q3":191800,"q4":575400,"fy26":767200,"fy27":5480004},{"area":"Coupons","bet_name":"New Coupons Platform (UI)","op_include":"No","line_type":"revenue","q1":0,"q2":0,"q3":264867,"q4":794600,"fy26":1059467,"fy27":0},{"area":"Coupons","bet_name":"New Coupons Platform (UI)","op_include":"Yes","line_type":"sga","q1":-43749,"q2":-43749,"q3":0,"q4":0,"fy26":-87498,"fy27":0},{"area":"Coupons","bet_name":"Competitor scraping for sales opportunities","op_include":"Yes","line_type":"revenue","q1":0,"q2":21000,"q3":38160,"q4":38160,"fy26":97320,"fy27":360000},{"area":"Coupons","bet_name":"Competitor scraping for sales opportunities","op_include":"No","line_type":"revenue","q1":0,"q2":29000,"q3":52680,"q4":52680,"fy26":134360,"fy27":0},{"area":"Coupons","bet_name":"Competitor scraping for sales opportunities","op_include":"Yes","line_type":"sga","q1":-5250,"q2":0,"q3":0,"q4":0,"fy26":-5250,"fy27":0},{"area":"Coupons","bet_name":"Improving LLM visibility with Trust Signals","op_include":"Yes","line_type":"revenue","q1":0,"q2":3707,"q3":3270,"q4":2964,"fy26":9941,"fy27":28236},{"area":"Coupons","bet_name":"Improving LLM visibility with Trust Signals","op_include":"No","line_type":"revenue","q1":0,"q2":5120,"q3":4516,"q4":4094,"fy26":13730,"fy27":0},{"area":"Coupons","bet_name":"Improving LLM visibility with Trust Signals","op_include":"Yes","line_type":"sga","q1":-3501,"q2":0,"q3":0,"q4":0,"fy26":-3501,"fy27":0},{"area":"Coupons","bet_name":"Posthog deployment to improve tracking","op_include":"Yes","line_type":"revenue","q1":0,"q2":25513,"q3":44054,"q4":42467,"fy26":112034,"fy27":423504},{"area":"Coupons","bet_name":"Posthog deployment to improve tracking","op_include":"No","line_type":"revenue","q1":0,"q2":35230,"q3":60846,"q4":58642,"fy26":154718,"fy27":0},{"area":"Coupons","bet_name":"Posthog deployment to improve tracking","op_include":"Yes","line_type":"sga","q1":-1749,"q2":0,"q3":0,"q4":0,"fy26":-1749,"fy27":0},{"area":"INTL Core Local","bet_name":"New Business Improvement Initiatives (Europe, Local)","op_include":"No","line_type":"revenue","q1":86060,"q2":286874,"q3":443035,"q4":563891,"fy26":1379860,"fy27":2346636},{"area":"INTL Core Local","bet_name":"New Business Improvement Initiatives (Europe, Local)","op_include":"Yes","line_type":"sga","q1":-11688,"q2":-11688,"q3":-4674,"q4":-4674,"fy26":-32724,"fy27":-18696},{"area":"INTL Core Local","bet_name":"Q1 MD Process Europe | Framework roll-out","op_include":"No","line_type":"revenue","q1":408714,"q2":641346,"q3":654117,"q4":1493127,"fy26":3197304,"fy27":3517349},{"area":"INTL Core Local","bet_name":"Q1 MD Process Europe | Framework roll-out","op_include":"Yes","line_type":"sga","q1":-3825,"q2":-3825,"q3":0,"q4":0,"fy26":-7650,"fy27":0},{"area":"INTL Core Local","bet_name":"2026 Q1 GTM (Coverage/Compensation Europe)","op_include":"Yes","line_type":"sga","q1":98250,"q2":233916,"q3":233916,"q4":233916,"fy26":799998,"fy27":0},{"area":"INTL Core Local","bet_name":"2026 Q1 GTM (Coverage/Compensation Europe)","op_include":"Yes","line_type":"sga","q1":-10749,"q2":-10749,"q3":0,"q4":0,"fy26":-21498,"fy27":0},{"area":"HBW","bet_name":"Portfolio NVR expansion","op_include":"No","line_type":"revenue","q1":415118,"q2":403419,"q3":403419,"q4":403419,"fy26":1625375,"fy27":1613388},{"area":"HBW","bet_name":"Portfolio NVR expansion","op_include":"Yes","line_type":"sga","q1":-65787,"q2":-65787,"q3":-65787,"q4":-65787,"fy26":-263148,"fy27":-263148},{"area":"HBW","bet_name":"Strategic partnerships","op_include":"No","line_type":"revenue","q1":0,"q2":450000,"q3":1100000,"q4":1650000,"fy26":3200000,"fy27":6600000},{"area":"HBW","bet_name":"Strategic partnerships","op_include":"Yes","line_type":"sga","q1":-42000,"q2":-42000,"q3":-42000,"q4":-42000,"fy26":-168000,"fy27":-168000},{"area":"HBW","bet_name":"High AOV","op_include":"No","line_type":"revenue","q1":60000,"q2":450000,"q3":1110000,"q4":2070000,"fy26":3690000,"fy27":22240000},{"area":"HBW","bet_name":"High AOV","op_include":"Yes","line_type":"sga","q1":-14175,"q2":-14175,"q3":-14175,"q4":-14175,"fy26":-56700,"fy27":-56700},{"area":"HBW","bet_name":"MidMarket Operational Excellence- BDDs Emerging Services","op_include":"No","line_type":"revenue","q1":22500,"q2":412500,"q3":907500,"q4":1412500,"fy26":2755000,"fy27":8970000},{"area":"HBW","bet_name":"MidMarket Operational Excellence- BDDs Emerging Services","op_include":"Yes","line_type":"sga","q1":-19350,"q2":-19350,"q3":-19350,"q4":-19350,"fy26":-77400,"fy27":-77400},{"area":"TTD","bet_name":"Geographic Expansion","op_include":"No","line_type":"revenue","q1":0,"q2":200000,"q3":625000,"q4":350000,"fy26":1175000,"fy27":2392000},{"area":"TTD","bet_name":"Geographic Expansion","op_include":"Yes","line_type":"sga","q1":-82500,"q2":-82500,"q3":-82500,"q4":-82500,"fy26":-330000,"fy27":-429000},{"area":"TTD","bet_name":"UX Clean up and Standardization in 3pip - Customer Facing","op_include":"No","line_type":"revenue","q1":0,"q2":225000,"q3":675000,"q4":600000,"fy26":1500000,"fy27":2880000},{"area":"TTD","bet_name":"UX Clean up and Standardization in 3pip - Customer Facing","op_include":"Yes","line_type":"sga","q1":-58800,"q2":-58800,"q3":-58800,"q4":-58800,"fy26":-235200,"fy27":0},{"area":"TTD","bet_name":"Closed Loop Discounting Strategy (Margin or Merchant Funded)","op_include":"No","line_type":"revenue","q1":0,"q2":100000,"q3":450000,"q4":450000,"fy26":1000000,"fy27":2070000},{"area":"TTD","bet_name":"Closed Loop Discounting Strategy (Margin or Merchant Funded)","op_include":"Yes","line_type":"sga","q1":-33651,"q2":-33651,"q3":-33651,"q4":-33651,"fy26":-134604,"fy27":-20004},{"area":"AOG","bet_name":"AOG - SL MBNXT Integration - Phase One","op_include":"Yes","line_type":"revenue","q1":0,"q2":0,"q3":87500,"q4":112500,"fy26":200000,"fy27":0},{"area":"AOG","bet_name":"AOG - SL MBNXT Integration - Phase One","op_include":"No","line_type":"revenue","q1":0,"q2":0,"q3":162500,"q4":162500,"fy26":325000,"fy27":0},{"area":"AOG","bet_name":"AOG - SL MBNXT Integration - Phase One","op_include":"Yes","line_type":"sga","q1":-5250,"q2":0,"q3":0,"q4":0,"fy26":-5250,"fy27":0},{"area":"AOG","bet_name":"AOG - MBNXT Integration - Phase Two","op_include":"Yes","line_type":"revenue","q1":0,"q2":0,"q3":87500,"q4":112500,"fy26":200000,"fy27":1000000},{"area":"AOG","bet_name":"AOG - MBNXT Integration - Phase Two","op_include":"No","line_type":"revenue","q1":0,"q2":0,"q3":162500,"q4":162500,"fy26":325000,"fy27":0},{"area":"AOG","bet_name":"AOG - MBNXT Integration - Phase Two","op_include":"Yes","line_type":"sga","q1":0,"q2":-5250,"q3":0,"q4":0,"fy26":-5250,"fy27":0},{"area":"AOG","bet_name":"AOG - GAM: MBNXT International Ad Units","op_include":"Yes","line_type":"revenue","q1":0,"q2":0,"q3":18125,"q4":26250,"fy26":44375,"fy27":300000},{"area":"AOG","bet_name":"AOG - GAM: MBNXT International Ad Units","op_include":"No","line_type":"revenue","q1":0,"q2":0,"q3":33625,"q4":48750,"fy26":82375,"fy27":0},{"area":"AOG","bet_name":"AOG - GAM: MBNXT International Ad Units","op_include":"Yes","line_type":"sga","q1":-3501,"q2":0,"q3":0,"q4":0,"fy26":-3501,"fy27":0},{"area":"H&A","bet_name":"Pillar 3: Home services, HVAC, annual subscriptions","op_include":"No","line_type":"revenue","q1":0,"q2":82500,"q3":165000,"q4":247500,"fy26":495000,"fy27":990000},{"area":"H&A","bet_name":"Pillar 3: Home services, HVAC, annual subscriptions","op_include":"Yes","line_type":"sga","q1":-3150,"q2":-3150,"q3":-3150,"q4":-3150,"fy26":-12600,"fy27":-12600},{"area":"H&A","bet_name":"Pillar 7: GIftcard networks (SVS, BHN, Incomm)","op_include":"No","line_type":"revenue","q1":0,"q2":0,"q3":39600,"q4":55800,"fy26":95400,"fy27":223200},{"area":"H&A","bet_name":"Pillar 7: GIftcard networks (SVS, BHN, Incomm)","op_include":"Yes","line_type":"sga","q1":-1050,"q2":-1050,"q3":-1050,"q4":-1050,"fy26":-4200,"fy27":-4200},{"area":"Travel","bet_name":"Hotel Trader properties scale-up","op_include":"No","line_type":"revenue","q1":18000,"q2":89500,"q3":196500,"q4":265000,"fy26":569000,"fy27":1142000},{"area":"Travel","bet_name":"Hotel Trader properties scale-up","op_include":"Yes","line_type":"sga","q1":-12501,"q2":-12501,"q3":-12501,"q4":-12501,"fy26":-50004,"fy27":-9996},{"area":"Travel","bet_name":"Bonotel properties scale-up","op_include":"No","line_type":"revenue","q1":0,"q2":35500,"q3":124500,"q4":213500,"fy26":373500,"fy27":854000},{"area":"Travel","bet_name":"Bonotel properties scale-up","op_include":"Yes","line_type":"sga","q1":-12501,"q2":-12501,"q3":-12501,"q4":-12501,"fy26":-50004,"fy27":-9996},{"area":"Travel","bet_name":"GWL Deals: Enabling Gifting + New deal page layout","op_include":"No","line_type":"revenue","q1":45000,"q2":135000,"q3":180000,"q4":180000,"fy26":540000,"fy27":720000},{"area":"Travel","bet_name":"GWL Deals: Enabling Gifting + New deal page layout","op_include":"Yes","line_type":"sga","q1":-18333,"q2":0,"q3":0,"q4":0,"fy26":-18333,"fy27":0},{"area":"Live","bet_name":"Connectivity - TixTrax","op_include":"No","line_type":"revenue","q1":20000,"q2":15000,"q3":30000,"q4":45000,"fy26":110000,"fy27":180000},{"area":"Live","bet_name":"Connectivity - TixTrax","op_include":"Yes","line_type":"sga","q1":-2250,"q2":-2250,"q3":-2250,"q4":-2250,"fy26":-9000,"fy27":-9000},{"area":"Live","bet_name":"Connectivity - Outbox","op_include":"No","line_type":"revenue","q1":10000,"q2":10000,"q3":15000,"q4":20000,"fy26":55000,"fy27":80000},{"area":"Live","bet_name":"Connectivity - Outbox","op_include":"Yes","line_type":"sga","q1":-2250,"q2":-2250,"q3":-2250,"q4":-2250,"fy26":-9000,"fy27":-9000},{"area":"Live","bet_name":"New Integration Telecharge","op_include":"No","line_type":"revenue","q1":0,"q2":0,"q3":15000,"q4":50000,"fy26":65000,"fy27":200000},{"area":"Live","bet_name":"New Integration Telecharge","op_include":"Yes","line_type":"sga","q1":-6500,"q2":-1500,"q3":-1500,"q4":-1500,"fy26":-11000,"fy27":-9000}];
+
+const INIT_RAW = [{"bet_name":"New Business Improvement Initiatives (Europe, Local)","line_type":"revenue","q1":173250,"q2":285404,"q3":394266,"q4":381580,"fy26":1234500,"fy27":1868250},{"bet_name":"New Business Improvement Initiatives (Europe, Local)","line_type":"sga","q1":-11688,"q2":-11688,"q3":-4674,"q4":-4674,"fy26":-32724,"fy27":-18696},{"bet_name":"Q1 MD Process Europe | Framework roll-out","line_type":"revenue","q1":408714,"q2":641346,"q3":654117,"q4":1493413,"fy26":3197590,"fy27":3517349},{"bet_name":"Q1 MD Process Europe | Framework roll-out","line_type":"sga","q1":-3825,"q2":-3825,"q3":0,"q4":0,"fy26":-7650,"fy27":0},{"bet_name":"GTM SG&A Europe","line_type":"sga","q1":365000,"q2":360800,"q3":80000,"q4":221200,"fy26":1027000,"fy27":0},{"bet_name":"GTM SG&A Europe","line_type":"sga","q1":-10749,"q2":-10749,"q3":0,"q4":0,"fy26":-21498,"fy27":0},{"bet_name":"Portfolio NVR expansion","line_type":"revenue","q1":150000,"q2":151000,"q3":560000,"q4":650000,"fy26":1511000,"fy27":2520000},{"bet_name":"Portfolio NVR expansion","line_type":"sga","q1":-65787,"q2":-65787,"q3":-65787,"q4":-65787,"fy26":-263148,"fy27":-263148},{"bet_name":"Strategic partnerships","line_type":"revenue","q1":0,"q2":450000,"q3":1100000,"q4":1700000,"fy26":3250000,"fy27":6600000},{"bet_name":"Strategic partnerships","line_type":"sga","q1":-66399,"q2":-66399,"q3":-66399,"q4":-66399,"fy26":-265596,"fy27":-265596},{"bet_name":"High AOV","line_type":"revenue","q1":90000,"q2":460000,"q3":1090000,"q4":2080000,"fy26":3720000,"fy27":22240000},{"bet_name":"High AOV","line_type":"sga","q1":-28800,"q2":-28800,"q3":-28800,"q4":-28800,"fy26":-345600,"fy27":-345600},{"bet_name":"MidMarket Operational Excellence- BDDs Emerging Services","line_type":"revenue","q1":22500,"q2":382500,"q3":907500,"q4":1440000,"fy26":2752500,"fy27":10852000},{"bet_name":"MidMarket Operational Excellence- BDDs Emerging Services","line_type":"sga","q1":-19350,"q2":-19350,"q3":-19350,"q4":-19350,"fy26":-77400,"fy27":-77400},{"bet_name":"Wishlist online","line_type":"revenue","q1":25000,"q2":105000,"q3":192500,"q4":382500,"fy26":705000,"fy27":1599996},{"bet_name":"Wishlist online","line_type":"sga","q1":-98697,"q2":-98697,"q3":-98697,"q4":-98697,"fy26":-394788,"fy27":-394788},{"bet_name":"Customisable Private Label SignaturePrintLab","line_type":"revenue","q1":15000,"q2":80000,"q3":51000,"q4":294000,"fy26":440000,"fy27":1200000},{"bet_name":"Customisable Private Label SignaturePrintLab","line_type":"sga","q1":-20760,"q2":-20760,"q3":-10680,"q4":-10680,"fy26":-62880,"fy27":-62880},{"bet_name":"GRO: Sponsored Marketing Activities \u2013 Build a Profitable Process","line_type":"revenue","q1":250000,"q2":300000,"q3":300000,"q4":450000,"fy26":1300000,"fy27":1800000},{"bet_name":"GRO: Sponsored Marketing Activities \u2013 Build a Profitable Process","line_type":"sga","q1":-6040,"q2":-6540,"q3":0,"q4":0,"fy26":-12580,"fy27":0},{"bet_name":"Deliver and Execute TTD Training and Playbooks + Coaching to BDs/MDs","line_type":"revenue","q1":0,"q2":400000,"q3":800000,"q4":800000,"fy26":2000000,"fy27":3200004},{"bet_name":"Deliver and Execute TTD Training and Playbooks + Coaching to BDs/MDs","line_type":"sga","q1":-39000,"q2":-39000,"q3":-26000,"q4":-39000,"fy26":-143000,"fy27":-143000},{"bet_name":"Geographic Expansion","line_type":"revenue","q1":50000,"q2":200000,"q3":385000,"q4":365000,"fy26":1000000,"fy27":2392000},{"bet_name":"Geographic Expansion","line_type":"sga","q1":-82500,"q2":-82500,"q3":-82500,"q4":-82500,"fy26":-330000,"fy27":-429000},{"bet_name":"UX Clean up and Standardization in 3pip - Customer Facing","line_type":"revenue","q1":0,"q2":225000,"q3":675000,"q4":600000,"fy26":1500000,"fy27":2880000},{"bet_name":"UX Clean up and Standardization in 3pip - Customer Facing","line_type":"sga","q1":-58800,"q2":-58800,"q3":-58800,"q4":-58800,"fy26":-235200,"fy27":0},{"bet_name":"Closed Loop Discounting Strategy (Margin or Merchant Funded)","line_type":"revenue","q1":0,"q2":100000,"q3":450000,"q4":450000,"fy26":1000000,"fy27":2070000},{"bet_name":"Closed Loop Discounting Strategy (Margin or Merchant Funded)","line_type":"sga","q1":-33651,"q2":-33651,"q3":-33651,"q4":-33651,"fy26":-134604,"fy27":-20004},{"bet_name":"Post Redemption Screen Optimization","line_type":"revenue","q1":0,"q2":0,"q3":22011,"q4":51228,"fy26":73239,"fy27":465000},{"bet_name":"Post Redemption Screen Optimization","line_type":"revenue","q1":0,"q2":0,"q3":30396,"q4":70713,"fy26":101109,"fy27":0},{"bet_name":"Post Redemption Screen Optimization","line_type":"sga","q1":-5250,"q2":0,"q3":0,"q4":0,"fy26":-5250,"fy27":0},{"bet_name":"Automated Offer Quality Improvements (1)","line_type":"revenue","q1":0,"q2":23626,"q3":94500,"q4":88500,"fy26":206626,"fy27":900000},{"bet_name":"Automated Offer Quality Improvements (1)","line_type":"revenue","q1":0,"q2":32626,"q3":130350,"q4":130350,"fy26":293326,"fy27":0},{"bet_name":"Automated Offer Quality Improvements (1)","line_type":"sga","q1":-12249,"q2":-8166,"q3":0,"q4":0,"fy26":-20415,"fy27":0},{"bet_name":"Ai Code Checker","line_type":"revenue","q1":0,"q2":92683,"q3":84840,"q4":74113,"fy26":251636,"fy27":705840},{"bet_name":"Ai Code Checker","line_type":"revenue","q1":0,"q2":127990,"q3":117237,"q4":102347,"fy26":347574,"fy27":0},{"bet_name":"Ai Code Checker","line_type":"sga","q1":-1749,"q2":0,"q3":0,"q4":0,"fy26":-1749,"fy27":0},{"bet_name":"New Coupons Platform (UI)","line_type":"revenue","q1":0,"q2":0,"q3":191800,"q4":575400,"fy26":767200,"fy27":5480004},{"bet_name":"New Coupons Platform (UI)","line_type":"revenue","q1":0,"q2":0,"q3":264867,"q4":794600,"fy26":1059467,"fy27":0},{"bet_name":"New Coupons Platform (UI)","line_type":"sga","q1":-43749,"q2":-43749,"q3":0,"q4":0,"fy26":-87498,"fy27":0},{"bet_name":"Competitor scraping for sales opportunities","line_type":"revenue","q1":0,"q2":21000,"q3":38160,"q4":38160,"fy26":97320,"fy27":360000},{"bet_name":"Competitor scraping for sales opportunities","line_type":"revenue","q1":0,"q2":29000,"q3":52680,"q4":52680,"fy26":134360,"fy27":0},{"bet_name":"Competitor scraping for sales opportunities","line_type":"sga","q1":-5250,"q2":0,"q3":0,"q4":0,"fy26":-5250,"fy27":0},{"bet_name":"Improving LLM visibility with Trust Signals","line_type":"revenue","q1":0,"q2":3707,"q3":3270,"q4":2964,"fy26":9941,"fy27":28236},{"bet_name":"Improving LLM visibility with Trust Signals","line_type":"revenue","q1":0,"q2":5120,"q3":4516,"q4":4094,"fy26":13730,"fy27":0},{"bet_name":"Improving LLM visibility with Trust Signals","line_type":"sga","q1":-3501,"q2":0,"q3":0,"q4":0,"fy26":-3501,"fy27":0},{"bet_name":"Posthog deployment to improve tracking","line_type":"revenue","q1":0,"q2":25513,"q3":44054,"q4":42467,"fy26":112034,"fy27":423504},{"bet_name":"Posthog deployment to improve tracking","line_type":"revenue","q1":0,"q2":35230,"q3":60846,"q4":58642,"fy26":154718,"fy27":0},{"bet_name":"Posthog deployment to improve tracking","line_type":"sga","q1":-1749,"q2":0,"q3":0,"q4":0,"fy26":-1749,"fy27":0},{"bet_name":"AOG - SL MBNXT Integration - Phase One","line_type":"revenue","q1":0,"q2":0,"q3":87500,"q4":112500,"fy26":200000,"fy27":0},{"bet_name":"AOG - SL MBNXT Integration - Phase One","line_type":"revenue","q1":0,"q2":0,"q3":162500,"q4":162500,"fy26":325000,"fy27":0},{"bet_name":"AOG - SL MBNXT Integration - Phase One","line_type":"sga","q1":-5250,"q2":0,"q3":0,"q4":0,"fy26":-5250,"fy27":0},{"bet_name":"AOG - MBNXT Integration - Phase Two","line_type":"revenue","q1":0,"q2":0,"q3":87500,"q4":112500,"fy26":200000,"fy27":1000000},{"bet_name":"AOG - MBNXT Integration - Phase Two","line_type":"revenue","q1":0,"q2":0,"q3":162500,"q4":162500,"fy26":325000,"fy27":0},{"bet_name":"AOG - MBNXT Integration - Phase Two","line_type":"sga","q1":0,"q2":-5250,"q3":0,"q4":0,"fy26":-5250,"fy27":0},{"bet_name":"AOG - GAM: MBNXT International Ad Units","line_type":"revenue","q1":0,"q2":0,"q3":18125,"q4":26250,"fy26":44375,"fy27":300000},{"bet_name":"AOG - GAM: MBNXT International Ad Units","line_type":"revenue","q1":0,"q2":0,"q3":33625,"q4":48750,"fy26":82375,"fy27":0},{"bet_name":"AOG - GAM: MBNXT International Ad Units","line_type":"sga","q1":-3501,"q2":0,"q3":0,"q4":0,"fy26":-3501,"fy27":0},{"bet_name":"Pillar 3: Home services, HVAC, annual subscriptions","line_type":"revenue","q1":0,"q2":82500,"q3":165000,"q4":247500,"fy26":495000,"fy27":990000},{"bet_name":"Pillar 3: Home services, HVAC, annual subscriptions","line_type":"sga","q1":-3150,"q2":-3150,"q3":-3150,"q4":-3150,"fy26":-12600,"fy27":-12600},{"bet_name":"Pillar 7: GIftcard networks (SVS, BHN, Incomm)","line_type":"revenue","q1":0,"q2":0,"q3":39600,"q4":55800,"fy26":95400,"fy27":223200},{"bet_name":"Pillar 7: GIftcard networks (SVS, BHN, Incomm)","line_type":"sga","q1":-1050,"q2":-1050,"q3":-1050,"q4":-1050,"fy26":-4200,"fy27":-4200},{"bet_name":"Hotel Trader properties scale-up","line_type":"revenue","q1":18000,"q2":89500,"q3":196500,"q4":285500,"fy26":589500,"fy27":1142000},{"bet_name":"Hotel Trader properties scale-up","line_type":"sga","q1":-12501,"q2":-12501,"q3":-12501,"q4":-12501,"fy26":-50004,"fy27":-9996},{"bet_name":"Bonotel properties scale-up","line_type":"revenue","q1":0,"q2":35500,"q3":124500,"q4":213500,"fy26":373500,"fy27":854000},{"bet_name":"Bonotel properties scale-up","line_type":"sga","q1":-12501,"q2":-12501,"q3":-12501,"q4":-12501,"fy26":-50004,"fy27":-9996},{"bet_name":"GWL Deals: Enabling Gifting + New deal page layout","line_type":"revenue","q1":45000,"q2":135000,"q3":180000,"q4":180000,"fy26":540000,"fy27":720000},{"bet_name":"GWL Deals: Enabling Gifting + New deal page layout","line_type":"sga","q1":-18333,"q2":0,"q3":0,"q4":0,"fy26":-18333,"fy27":0},{"bet_name":"Connectivity - TixTrax","line_type":"revenue","q1":20000,"q2":15000,"q3":30000,"q4":45000,"fy26":110000,"fy27":180000},{"bet_name":"Connectivity - TixTrax","line_type":"sga","q1":-2250,"q2":-2250,"q3":-2250,"q4":-2250,"fy26":-9000,"fy27":-9000},{"bet_name":"Connectivity - Outbox","line_type":"revenue","q1":10000,"q2":10000,"q3":15000,"q4":20000,"fy26":55000,"fy27":80000},{"bet_name":"Connectivity - Outbox","line_type":"sga","q1":-2250,"q2":-2250,"q3":-2250,"q4":-2250,"fy26":-9000,"fy27":-9000},{"bet_name":"Live Nation & Ticketmaster agreement","line_type":"revenue","q1":50000,"q2":90000,"q3":98000,"q4":80000,"fy26":318000,"fy27":320000},{"bet_name":"Live Nation & Ticketmaster agreement","line_type":"sga","q1":-6500,"q2":-1500,"q3":-1500,"q4":-1500,"fy26":-11000,"fy27":-9000},{"bet_name":"New Integration Telecharge","line_type":"revenue","q1":0,"q2":0,"q3":15000,"q4":50000,"fy26":65000,"fy27":200000},{"bet_name":"New Integration Telecharge","line_type":"sga","q1":-6500,"q2":-1500,"q3":-1500,"q4":-1500,"fy26":-11000,"fy27":-9000}];
+// =============================================
+// JAN/FEB ACTUALS COMPARISON DATA
+// =============================================
+const ACTUALS_DATA = [
+  {"area":"Online/Retail","bet_name":"2026 Wishlists Online","i1_rev_jan":7500,"i1_rev_feb":7500,"i2_rev_jan":1000,"i2_rev_feb":9600,"i1_sga_jan":-32899,"i1_sga_feb":-32899,"i2_sga_jan":-32899,"i2_sga_feb":-32899},
+  {"area":"Online/Retail","bet_name":"Customisable Private Label SignaturePrintLab","i1_rev_jan":4500,"i1_rev_feb":4500,"i2_rev_jan":0,"i2_rev_feb":3000,"i1_sga_jan":-6920,"i1_sga_feb":-6920,"i2_sga_jan":-6920,"i2_sga_feb":-6920},
+  {"area":"Online/Retail","bet_name":"Sponsored Marketing Activities \u2013 Build a Profitable Process","i1_rev_jan":75000,"i1_rev_feb":75000,"i2_rev_jan":0,"i2_rev_feb":175000,"i1_sga_jan":-1680,"i1_sga_feb":-2180,"i2_sga_jan":-1680,"i2_sga_feb":-2180},
+  {"area":"Coupons","bet_name":"Competitor scraping for sales opportunities","i1_rev_jan":6000,"i1_rev_feb":6000,"i2_rev_jan":0,"i2_rev_feb":0,"i1_sga_jan":-1750,"i1_sga_feb":-1750,"i2_sga_jan":-1750,"i2_sga_feb":-1750},
+  {"area":"INTL Core Local","bet_name":"New Business Improvement Initiatives (Europe, Local)","i1_rev_jan":51750,"i1_rev_feb":51750,"i2_rev_jan":-27605,"i2_rev_feb":53775,"i1_sga_jan":-3896,"i1_sga_feb":-3896,"i2_sga_jan":-3896,"i2_sga_feb":-3896},
+  {"area":"INTL Core Local","bet_name":"Q1 MD Process Europe | Framework roll-out","i1_rev_jan":122614,"i1_rev_feb":122614,"i2_rev_jan":0,"i2_rev_feb":0,"i1_sga_jan":-1275,"i1_sga_feb":-1275,"i2_sga_jan":-1275,"i2_sga_feb":-1275},
+  {"area":"HBW","bet_name":"Portfolio NVR expansion","i1_rev_jan":40000,"i1_rev_feb":45000,"i2_rev_jan":90769,"i2_rev_feb":189876,"i1_sga_jan":-21929,"i1_sga_feb":-21929,"i2_sga_jan":-21929,"i2_sga_feb":-21929},
+  {"area":"HBW","bet_name":"High AOV","i1_rev_jan":0,"i1_rev_feb":30000,"i2_rev_jan":0,"i2_rev_feb":0,"i1_sga_jan":-28800,"i1_sga_feb":-28800,"i2_sga_jan":-4725,"i2_sga_feb":-4725},
+  {"area":"TTD","bet_name":"Geographic Expansion","i1_rev_jan":15000,"i1_rev_feb":15000,"i2_rev_jan":0,"i2_rev_feb":0,"i1_sga_jan":-27500,"i1_sga_feb":-27500,"i2_sga_jan":-27500,"i2_sga_feb":-27500},
+  {"area":"Travel","bet_name":"Hotel Trader properties scale-up","i1_rev_jan":5400,"i1_rev_feb":5400,"i2_rev_jan":0,"i2_rev_feb":0,"i1_sga_jan":-4167,"i1_sga_feb":-4167,"i2_sga_jan":-4167,"i2_sga_feb":-4167},
+  {"area":"Travel","bet_name":"GWL Deals: Enabling Gifting + New deal page layout","i1_rev_jan":13500,"i1_rev_feb":13500,"i2_rev_jan":0,"i2_rev_feb":0,"i1_sga_jan":0,"i1_sga_feb":-10000,"i2_sga_jan":0,"i2_sga_feb":0},
+  {"area":"Live","bet_name":"Connectivity - TixTrax","i1_rev_jan":6000,"i1_rev_feb":6000,"i2_rev_jan":6000,"i2_rev_feb":6000,"i1_sga_jan":-750,"i1_sga_feb":-750,"i2_sga_jan":-750,"i2_sga_feb":-750},
+  {"area":"Live","bet_name":"Connectivity - Outbox","i1_rev_jan":3000,"i1_rev_feb":3000,"i2_rev_jan":3000,"i2_rev_feb":3000,"i1_sga_jan":-750,"i1_sga_feb":-750,"i2_sga_jan":-750,"i2_sga_feb":-750}
+];
+
+// Name mapping: March bet_name -> Init bet_name (where different)
+const NAME_MAP = {
+  "2026 Wishlists Online": "Wishlist online",
+  "Sponsored Marketing Activities \u2013 Build a Profitable Process": "GRO: Sponsored Marketing Activities \u2013 Build a Profitable Process"
+};
+const REVERSE_NAME_MAP = {};
+for (const [k,v] of Object.entries(NAME_MAP)) REVERSE_NAME_MAP[v] = k;
+
+// Canceled bets (in init but not in march)
+const CANCELED_BETS = ["Live Nation & Ticketmaster agreement"];
+
+// Bet statuses from MBR docs
+const BET_STATUS = {
+  "Connectivity - TixTrax": {color:"green", text:"On Track: QTD M1VFM at $16K as of March 16th."},
+  "Connectivity - Outbox": {color:"green", text:"On Track: QTD M1VFM at $9K as of March 16th."},
+  "New Integration Telecharge": {color:"green", text:"GRO created and approved; integration in progress."},
+  "Hotel Trader properties scale-up": {color:"red", text:"At Risk: QTD M1VFM <$1K. Blocked by MLOS/blackout functionality issues."},
+  "Bonotel properties scale-up": {color:"green", text:"On Track: Contract signed. Launching early Q2."},
+  "GWL Deals: Enabling Gifting + New deal page layout": {color:"yellow", text:"Mixed: New deal page live (+3.6% CVR). Gifting enablement moved to Q2."},
+  "2026 Wishlists Online": {color:"red", text:"At Risk: Only 3/10 target products live. Low outreach conversion (2/117 active)."},
+  "Customisable Private Label SignaturePrintLab": {color:"green", text:"On Track: Pilot launched under SignaturePrintLab brand. >800 units. Phase 2 scoping."},
+  "Enable Apple App\u2013Linked E-Learning Deals on iOS": {color:"green", text:"Approved. Execution starts Q2."},
+  "Sponsored Marketing Activities \u2013 Build a Profitable Process": {color:"green", text:"Started: $150K pilot live W10 (License Tom). Tracking $270K incremental GB target."},
+  "Portfolio NVR expansion": {color:"yellow", text:"Progressing: Revenue ramp ongoing. HBW bets under commercial review."},
+  "Strategic partnerships": {color:"yellow", text:"In progress. Key partnerships under negotiation."},
+  "High AOV": {color:"yellow", text:"In progress: Execution ongoing, revenue ramp expected Q2-Q3."},
+  "MidMarket Operational Excellence- BDDs Emerging Services": {color:"yellow", text:"In progress: Expanding into 15 regulated H&W categories (GLP-1, longevity, stem cell, body contouring) across 25 NA cities. Target: 3 deals live by Mar, 25 by Jun. DRI: Lindsey Meszaros. ✅ Approved."},
+  "New Business Improvement Initiatives (Europe, Local)": {color:"yellow", text:"Mixed: Jan slightly below plan due to timing (-$28K vs $52K plan) but Feb recovered to $54K, above OP. QTD improving with UAE Ramadan uplift. Europe growing strongly."},
+  "Q1 MD Process Europe | Framework roll-out": {color:"yellow", text:"Execution Delayed: Framework deployment in progress; revenue ramp now expected from Mar onward."},
+  "2026 Q1 GTM (Coverage/Compensation Europe)": {color:"green", text:"On Track: GTM coverage and compensation structure in place."},
+  "Geographic Expansion": {color:"green", text:"Progressing: Jiri confirmed feasibility. Execution on track for Q2 revenue ramp."},
+  "UX Clean up and Standardization in 3pip - Customer Facing": {color:"green", text:"On Track: Solution being built directly. Revenue ramp from Q2."},
+  "Closed Loop Discounting Strategy (Margin or Merchant Funded)": {color:"green", text:"In progress: GL leading setup. Pilot group rollout next. No Q1 revenue expected."},
+  "Pillar 3: Home services, HVAC, annual subscriptions": {color:"green", text:"On Track: No Q1 impact expected. Revenue ramp begins Q2."},
+  "Pillar 7: GIftcard networks (SVS, BHN, Incomm)": {color:"green", text:"On Track: No impact expected until Q3. On plan."},
+  "AOG - SL MBNXT Integration - Phase One": {color:"yellow", text:"Mixed: Development in progress. Q3 revenue start feasible."},
+  "AOG - MBNXT Integration - Phase Two": {color:"yellow", text:"Mixed: Phase 2 planned post Phase One. Timeline dependent on P1 delivery."},
+  "AOG - GAM: MBNXT International Ad Units": {color:"yellow", text:"In progress: GAM integration with MBNXT being scoped."},
+  "Eliminate \u201cOccasional Drops\u201d in Coupons (SEO SOV Stability)": {color:"yellow", text:"In progress: SEO stability work ongoing. Revenue expected H2."},
+  "Move towards exclusive code agreements and click-less tracking": {color:"yellow", text:"In progress: Negotiations with partners ongoing."},
+  "PPC Supply": {color:"yellow", text:"In progress: PPC supply framework being built."},
+  "Post Redemption Screen Optimization": {color:"yellow", text:"In progress: Screen optimization in development."},
+  "Automated Offer Quality Improvements (1)": {color:"green", text:"On Track: Automation pipeline live and improving offer quality."},
+  "Ai Code Checker": {color:"green", text:"On Track: AI code checker deployed, revenue tracking to plan."},
+  "New Coupons Platform (UI)": {color:"green", text:"On Track: New platform in build. Revenue ramp from Q3."},
+  "Competitor scraping for sales opportunities": {color:"green", text:"In progress: Scraping tool being deployed."},
+  "Improving LLM visibility with Trust Signals": {color:"green", text:"In progress: Trust signal framework being implemented."},
+  "Posthog deployment to improve tracking": {color:"green", text:"On Track: Posthog deployed for tracking improvements."},
+  "Deliver and Execute TTD Training and Playbooks + Coaching to BDs/MDs": {color:"yellow", text:"Blocked on new hire — Category Playbooks acceleration stuck in hiring process since October. Roadmap delivery targeted March."},
+  "GTM SG&A Europe": {color:"green", text:"On Track: GTM coverage and compensation structure in place for Europe."}
+};
+
+// Asana GRO links per bet
+const BET_LINKS = {
+  // Online/Retail
+  "2026 Wishlists Online":                                              "https://app.asana.com/1/8437193015852/project/1213511175573736/list/1213514776923092",
+  "Enable Apple App\u2013Linked E-Learning Deals on iOS":              "https://app.asana.com/1/8437193015852/project/1210519718114404/task/1212754153199721",
+  "Customisable Private Label SignaturePrintLab":                       "https://app.asana.com/1/8437193015852/project/1212530044928330/list/1212530051113119",
+  "Sponsored Marketing Activities \u2013 Build a Profitable Process":   "https://app.asana.com/1/8437193015852/project/1212004342496752/task/1212756375452548",
+  // Coupons
+  "New Coupons Platform (UI)":                                          "https://app.asana.com/1/8437193015852/project/1211602817765316/task/1211543960265513",
+  "Ai Code Checker":                                                    "https://app.asana.com/1/8437193015852/project/1211602817765316/task/1211543960265520",
+  "Automated Offer Quality Improvements (1)":                          "https://app.asana.com/1/8437193015852/project/1210854688938844/task/1211543960265517",
+  "Eliminate \u201cOccasional Drops\u201d in Coupons (SEO SOV Stability)": "https://app.asana.com/1/8437193015852/project/1211602817765316/task/1211543960265511",
+  "Posthog deployment to improve tracking":                             "https://app.asana.com/1/8437193015852/project/1211602817765316/task/1212707466766201",
+  "Competitor scraping for sales opportunities":                        "https://app.asana.com/1/8437193015852/project/1211602817765316/task/1211246680739505",
+  "Post Redemption Screen Optimization":                                "https://app.asana.com/1/8437193015852/project/1210854688938844/task/1211543960265523",
+  "Move towards exclusive code agreements and click-less tracking":     "https://app.asana.com/1/8437193015852/project/1211602817765316/task/1212706376319862",
+  "PPC Supply":                                                         "https://app.asana.com/1/8437193015852/project/1211602817765316/task/1212926315077202",
+  "Improving LLM visibility with Trust Signals":                        "https://app.asana.com/1/8437193015852/project/1211602817765316/task/1211543960265519",
+  // INTL Core Local
+  "New Business Improvement Initiatives (Europe, Local)":              "https://app.asana.com/1/8437193015852/project/1212739937361684/list/1212743106793196",
+  "Q1 MD Process Europe | Framework roll-out":                         "https://app.asana.com/1/8437193015852/project/1213191632157216/list/1213230559501649",
+  "2026 Q1 GTM (Coverage/Compensation Europe)":                        "https://app.asana.com/1/8437193015852/project/1210519718114404/task/1212858229003765",
+  // HBW
+  "Portfolio NVR expansion":                                            "https://app.asana.com/1/8437193015852/project/1212004342496752/task/1212802773308804",
+  "Strategic partnerships":                                             "https://app.asana.com/1/8437193015852/project/1212004342496752/task/1212392462934031",
+  "High AOV":                                                           "https://app.asana.com/1/8437193015852/project/1212004342496752/task/1212681533587960",
+  "MidMarket Operational Excellence- BDDs Emerging Services":          "https://app.asana.com/1/8437193015852/project/1212004342496752/task/1212671961104240",
+  // TTD
+  "Closed Loop Discounting Strategy (Margin or Merchant Funded)":      "https://app.asana.com/1/8437193015852/project/1212004342496752/task/1213434438029052",
+  "Geographic Expansion":                                               "https://app.asana.com/1/8437193015852/project/1212004342496752/task/1211316977278760",
+  "UX Clean up and Standardization in 3pip - Customer Facing":         "https://app.asana.com/1/8437193015852/project/1211000340519359",
+  // AOG
+  "AOG - SL MBNXT Integration - Phase One":                            "https://app.asana.com/1/8437193015852/project/1211704918749243/task/1211977699498638",
+  "AOG - MBNXT Integration - Phase Two":                               "https://app.asana.com/1/8437193015852/project/1211704918749243/task/1212661944530808",
+  "AOG - GAM: MBNXT International Ad Units":                           "https://app.asana.com/1/8437193015852/project/1211704918749243/task/1211977699498636",
+  // H&A
+  "Pillar 3: Home services, HVAC, annual subscriptions":               "https://app.asana.com/1/8437193015852/project/1212004342496752/task/1212795784910437",
+  "Pillar 7: GIftcard networks (SVS, BHN, Incomm)":                   "https://app.asana.com/1/8437193015852/project/1212004342496752/task/1212795784910445",
+  // Travel
+  "Hotel Trader properties scale-up":                                   "https://app.asana.com/1/8437193015852/project/1211782419638267/task/1212298959263326",
+  "Bonotel properties scale-up":                                        "https://app.asana.com/1/8437193015852/project/1211782419638267/task/1212001813285210",
+  "GWL Deals: Enabling Gifting + New deal page layout":                "https://app.asana.com/1/8437193015852/project/1211782419638267/task/1211534943895936",
+  // Live
+  "Connectivity - TixTrax":                                             "https://app.asana.com/1/8437193015852/project/1207254861263240",
+  "Connectivity - Outbox":                                              "https://app.asana.com/1/8437193015852/project/1207254861263240",
+  "New Integration Telecharge":                                         "https://app.asana.com/1/8437193015852/project/1207921702169255/task/1212907382597457",
+  "Deliver and Execute TTD Training and Playbooks + Coaching to BDs/MDs": "https://app.asana.com/1/8437193015852/project/1212004342496752/task/1212853655263858",
+  "GTM SG&A Europe":                                                        "https://app.asana.com/1/8437193015852/project/1210519718114404/task/1212858229003765"
+};
+
+// Helper: render Asana link button
+function asanaLink(betName) {
+  const url = BET_LINKS[betName];
+  if (!url) return '';
+  return `<a href="${url}" target="_blank" onclick="event.stopPropagation()" style="display:inline-flex;align-items:center;gap:4px;margin-left:6px;padding:2px 7px;background:#f96332;color:#fff;border-radius:4px;font-size:9.5px;font-weight:700;text-decoration:none;letter-spacing:0.3px;white-space:nowrap;flex-shrink:0;vertical-align:middle;">
+    <svg width="9" height="9" viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M22.908 12.956a8.952 8.952 0 1 0-13.816 0A8.957 8.957 0 0 0 16 26.044a8.957 8.957 0 0 0 6.908-13.088zM9.572 18.368a5.972 5.972 0 1 1 12.856 0 5.972 5.972 0 0 1-12.856 0z"/><circle cx="16" cy="6.044" r="3.088"/><circle cx="7.088" cy="22.912" r="3.088"/><circle cx="24.912" cy="22.912" r="3.088"/></svg>
+    Asana
+  </a>`;
+}
+
+// Value View Model links per area
+const VALUE_VIEW_LINKS = {
+  "Online/Retail":    "https://docs.google.com/spreadsheets/d/1IQkokadXbquH36y0xO8Bld1GNspcr3pg/edit?gid=94614824#gid=94614824",
+  "Coupons":          "https://docs.google.com/spreadsheets/d/1LzZ7V0Gc4W3YYCF4cVY_knLph37HJAqT/edit?gid=815003097#gid=815003097&range=B40",
+  "AOG":              "https://docs.google.com/spreadsheets/d/1LzZ7V0Gc4W3YYCF4cVY_knLph37HJAqT/edit?gid=815003097#gid=815003097&range=B40",
+  "H&A":              "https://docs.google.com/spreadsheets/d/1LzZ7V0Gc4W3YYCF4cVY_knLph37HJAqT/edit?gid=815003097#gid=815003097&range=B40",
+  "INTL Core Local":  "https://docs.google.com/spreadsheets/d/1H9s0zDCReMDJX7igTHdAgJ-8fm8KNrRr/edit?gid=1712102844#gid=1712102844",
+  "HBW":              "https://docs.google.com/spreadsheets/d/1gC8t708nGxGhkgsHysdt_H8Sjg56UEM1/edit?gid=520279403#gid=520279403",
+  "TTD":              "https://docs.google.com/spreadsheets/d/170p3jsVa7aLaOnC77_7BwtphvuabJmrP0ya3fvb-GGc/edit?gid=1817129263#gid=1817129263&range=C4",
+  "Travel":           "https://docs.google.com/spreadsheets/d/170p3jsVa7aLaOnC77_7BwtphvuabJmrP0ya3fvb-GGc/edit?gid=1817129263#gid=1817129263&range=C4",
+  "Live":             "https://docs.google.com/spreadsheets/d/170p3jsVa7aLaOnC77_7BwtphvuabJmrP0ya3fvb-GGc/edit?gid=1817129263#gid=1817129263&range=C4"
+};
+
+// Helper: render Value View Model button
+function valueViewLink(area) {
+  const url = VALUE_VIEW_LINKS[area];
+  if (!url) return '';
+  return `<a href="${url}" target="_blank" onclick="event.stopPropagation()" style="display:inline-flex;align-items:center;gap:4px;margin-left:4px;padding:2px 7px;background:#0f9d58;color:#fff;border-radius:4px;font-size:9.5px;font-weight:700;text-decoration:none;letter-spacing:0.3px;white-space:nowrap;flex-shrink:0;vertical-align:middle;">
+    <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H7v-2h5v2zm5-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+    Value View Model
+  </a>`;
+}
+
+// Area ordering
+const AREA_ORDER = ["Online/Retail","Coupons","INTL Core Local","HBW","TTD","AOG","H&A","Travel","Live"];
+const AREA_SHORT = {"Online/Retail":"Online","Coupons":"Coupons","INTL Core Local":"INTL","HBW":"HBW","TTD":"TTD","AOG":"AOG","H&A":"H&A","Travel":"Travel","Live":"Live"};
+const AREA_COLORS = {"Online/Retail":"#2563eb","Coupons":"#0891b2","INTL Core Local":"#6366f1","HBW":"#d97706","TTD":"#0f766e","AOG":"#7c3aed","H&A":"#059669","Travel":"#c2410c","Live":"#db2777"};
+// Only Coupons has the OP split — all other areas (incl AOG) are 100% NOT in OP
+const COUPON_AREAS = ["Coupons"];
+
+// =============================================
+// STATE
+// =============================================
+let opFilter = 'all';       // 'all','Yes','No'
+let approvedFilter = 'all'; // 'all','approved'
+
+// Initial approved bets set (editable in Settings → Approval Status)
+const APPROVED_BETS = new Set(["2026 Wishlists Online", "Enable Apple App\u2013Linked E-Learning Deals on iOS", "Q1 MD Process Europe | Framework roll-out", "Deliver and Execute TTD Training and Playbooks + Coaching to BDs/MDs", "New Business Improvement Initiatives (Europe, Local)", "GTM SG&A Europe", "New Coupons Platform (UI)", "Ai Code Checker", "Automated Offer Quality Improvements (1)", "Eliminate \u201cOccasional Drops\u201d in Coupons (SEO SOV Stability)", "Posthog deployment to improve tracking", "Competitor scraping for sales opportunities", "Move towards exclusive code agreements and click-less tracking", "PPC Supply", "Improving LLM visibility with Trust Signals", "Customisable Private Label SignaturePrintLab", "Sponsored Marketing Activities \u2013 Build a Profitable Process"]);
+
+// inclusion state: {betName: {march: bool, init: bool}}
+const inclState = {};
+const allBetNames = [...new Set(MARCH_RAW.map(r=>r.bet_name))];
+allBetNames.forEach(n => { inclState[n] = {march: true, init: true, approved: APPROVED_BETS.has(n)}; });
+// also track canceled bets for init
+CANCELED_BETS.forEach(n => { if (!inclState[n]) inclState[n] = {march: false, init: true, approved: APPROVED_BETS.has(n)}; });
+
+// =============================================
+// HELPERS
+// =============================================
+function fmt(v, abbrev=true) {
+  if (v === 0 || v === null || v === undefined) return '–';
+  const sign = v < 0 ? '-' : '';
+  const av = Math.abs(v);
+  if (abbrev && av >= 1000000) return sign + '$' + (av/1000000).toFixed(1) + 'M';
+  if (abbrev && av >= 1000) return sign + '$' + Math.round(av/1000) + 'K';
+  return sign + '$' + av.toLocaleString();
+}
+function fmtVar(v) {
+  if (!v || v === 0) return '<span class="variance-neutral">–</span>';
+  const cls = v > 0 ? 'variance-positive' : 'variance-negative';
+  const sign = v > 0 ? '+' : '';
+  return `<span class="${cls}">${sign}${fmt(v)}</span>`;
+}
+function statusCircle(bet) {
+  const s = BET_STATUS[bet];
+  if (!s) return '<span class="status-circle status-gray"></span>';
+  const map = {green:'status-green',yellow:'status-yellow',red:'status-red'};
+  return `<span class="status-circle ${map[s.color]||'status-gray'}"></span>`;
+}
+function isApprovalFiltered(betName) {
+  // returns true if this bet should be EXCLUDED given the current approvedFilter
+  if (approvedFilter === 'all') return false;
+  const st = inclState[betName] || {};
+  return !st.approved;
+}
+
+function shouldIncludeRevRow(row) {
+  if (row.line_type !== 'revenue') return true; // SG&A always included
+  if (opFilter === 'all') return true;           // no filter active
+  return row.op_include === opFilter;             // apply to all revenue lines
+}
+
+// =============================================
+// COMPUTE AGGREGATED BET DATA (March)
+// =============================================
+function computeMarchBets() {
+  // Returns array of {area, bet_name, rev_q1..q4, rev_fy26, rev_fy27, sga_q1..q4, sga_fy26, sga_fy27}
+  const betMap = {};
+  for (const row of MARCH_RAW) {
+    if (!inclState[row.bet_name] || !inclState[row.bet_name].march) continue;
+    if (isApprovalFiltered(row.bet_name)) continue;
+    const key = row.bet_name;
+    if (!betMap[key]) betMap[key] = {area: row.area, bet_name: row.bet_name,
+      rev_q1:0,rev_q2:0,rev_q3:0,rev_q4:0,rev_fy26:0,rev_fy27:0,
+      sga_q1:0,sga_q2:0,sga_q3:0,sga_q4:0,sga_fy26:0,sga_fy27:0};
+    if (row.line_type === 'revenue') {
+      if (!shouldIncludeRevRow(row)) continue;
+      betMap[key].rev_q1 += row.q1; betMap[key].rev_q2 += row.q2;
+      betMap[key].rev_q3 += row.q3; betMap[key].rev_q4 += row.q4;
+      betMap[key].rev_fy26 += row.fy26; betMap[key].rev_fy27 += row.fy27;
+    } else {
+      betMap[key].sga_q1 += row.q1; betMap[key].sga_q2 += row.q2;
+      betMap[key].sga_q3 += row.q3; betMap[key].sga_q4 += row.q4;
+      betMap[key].sga_fy26 += row.fy26; betMap[key].sga_fy27 += row.fy27;
+    }
+  }
+  return Object.values(betMap);
+}
+
+function computeInitBets() {
+  const betMap = {};
+  for (const row of INIT_RAW) {
+    const marchName = REVERSE_NAME_MAP[row.bet_name] || row.bet_name;
+    const stateKey = marchName;
+    if (inclState[stateKey] && !inclState[stateKey].init) continue;
+    if (isApprovalFiltered(stateKey)) continue;
+    if (CANCELED_BETS.includes(row.bet_name) && inclState[row.bet_name] && !inclState[row.bet_name].init) continue;
+    const key = row.bet_name;
+    if (!betMap[key]) betMap[key] = {bet_name: row.bet_name,
+      rev_q1:0,rev_q2:0,rev_q3:0,rev_q4:0,rev_fy26:0,rev_fy27:0,
+      sga_q1:0,sga_q2:0,sga_q3:0,sga_q4:0,sga_fy26:0,sga_fy27:0};
+    if (row.line_type === 'revenue') {
+      betMap[key].rev_q1 += row.q1; betMap[key].rev_q2 += row.q2;
+      betMap[key].rev_q3 += row.q3; betMap[key].rev_q4 += row.q4;
+      betMap[key].rev_fy26 += row.fy26; betMap[key].rev_fy27 += row.fy27;
+    } else {
+      betMap[key].sga_q1 += row.q1; betMap[key].sga_q2 += row.q2;
+      betMap[key].sga_q3 += row.q3; betMap[key].sga_q4 += row.q4;
+      betMap[key].sga_fy26 += row.fy26; betMap[key].sga_fy27 += row.fy27;
+    }
+  }
+  return Object.values(betMap);
+}
+
+// =============================================
+// RENDER SECTION 1: SUMMARY
+// =============================================
+
+// =============================================
+// RENDER SECTION 1: APPROVED vs PENDING SUMMARY
+// =============================================
+function approvalBadge(betName, small=false) {
+  const st = inclState[betName] || {};
+  const approved = st.approved !== false;
+  const sz = small ? 'font-size:9px;padding:1px 5px;' : 'font-size:9.5px;padding:2px 7px;';
+  if (approved) {
+    return `<span style="${sz}display:inline-block;background:#dcfce7;color:#166534;border-radius:4px;font-weight:700;margin-left:4px;white-space:nowrap;">✅ Approved</span>`;
+  } else {
+    return `<span style="${sz}display:inline-block;background:#fef3c7;color:#92400e;border-radius:4px;font-weight:700;margin-left:4px;white-space:nowrap;">⏳ Pending</span>`;
+  }
+}
+
+function renderApprovalSummary() {
+  const bets = computeMarchBets();
+
+  const approved = bets.filter(b => (inclState[b.bet_name]||{}).approved !== false);
+  const pending  = bets.filter(b => (inclState[b.bet_name]||{}).approved === false);
+
+  const sumNet = (arr, k26='rev_fy26', k27='rev_fy27', s26='sga_fy26', s27='sga_fy27') =>
+    arr.reduce((a,b) => ({r26:a.r26+b[k26], r27:a.r27+b[k27], s26:a.s26+b[s26], s27:a.s27+b[s27],
+                          n26:a.n26+b[k26]+b[s26], n27:a.n27+b[k27]+b[s27]}),
+               {r26:0,r27:0,s26:0,s27:0,n26:0,n27:0});
+
+  const aSum = sumNet(approved);
+  const pSum = sumNet(pending);
+  const tSum = {r26:aSum.r26+pSum.r26, n26:aSum.n26+pSum.n26, n27:aSum.n27+pSum.n27};
+
+  const pct26 = tSum.n26 ? Math.round(pSum.n26/tSum.n26*100) : 0;
+  const pct27 = tSum.n27 ? Math.round(pSum.n27/tSum.n27*100) : 0;
+
+  // KPI cards
+  const kpis = [
+    {label:'Approved FY26 Net', value:fmt(aSum.n26), delta:'✅ Approved bets', color:'#dcfce7', tc:'#166534'},
+    {label:'Pending FY26 Net',  value:fmt(pSum.n26), delta:`${pct26}% of total FY26`, color:'#fef3c7', tc:'#92400e'},
+    {label:'Approved FY27 Net', value:fmt(aSum.n27), delta:'✅ Forward look', color:'#dcfce7', tc:'#166534'},
+    {label:'Pending FY27 Net',  value:fmt(pSum.n27), delta:`${pct27}% of total FY27`, color:'#fef3c7', tc:'#92400e'},
+    {label:'Approved Bets',     value:approved.length, delta:'out of '+(approved.length+pending.length), color:'#eff6ff', tc:'#1d4ed8'},
+    {label:'Pending Approval',  value:pending.length,  delta:'awaiting decision', color:'#fef3c7', tc:'#92400e'},
+  ];
+  const kpiEl = document.getElementById('approvalKPIs');
+  if (kpiEl) kpiEl.innerHTML = kpis.map(k=>`
+    <div style="background:${k.color};border-radius:10px;padding:16px;border:1px solid rgba(0,0,0,0.06);">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:${k.tc};opacity:0.8;">${k.label}</div>
+      <div style="font-size:22px;font-weight:800;color:${k.tc};margin-top:4px;">${k.value}</div>
+      <div style="font-size:11px;color:${k.tc};opacity:0.7;margin-top:2px;">${k.delta}</div>
+    </div>`).join('');
+
+  // Warning text
+  const wEl = document.getElementById('pendingWarningText');
+  if (wEl) wEl.innerHTML = pending.length === 0
+    ? 'All included bets are approved — no pending approval risk.'
+    : `<strong>${pending.length} bets</strong> with a combined <strong>FY26 net impact of ${fmt(pSum.n26)}</strong> and <strong>FY27 net impact of ${fmt(pSum.n27)}</strong> are pending approval. This represents <strong>${pct26}% of total FY26 net impact</strong>. Leadership decision needed to confirm whether these should be included in the baseline plan.`;
+
+  const p = 'padding:7px 8px;';
+  function betRow(b, showApproval=false) {
+    const net26 = b.rev_fy26 + b.sga_fy26;
+    const net27 = b.rev_fy27 + b.sga_fy27;
+    const color = AREA_COLORS[b.area]||'#374151';
+    return `<tr>
+      <td style="${p}max-width:200px;">
+        <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
+          <span style="font-size:11px;font-weight:600;">${b.bet_name}</span>
+          ${asanaLink(b.bet_name)}${valueViewLink(b.area)}
+        </div>
+        <div style="font-size:10px;color:${color};font-weight:600;margin-top:1px;">${b.area}</div>
+      </td>
+      <td class="num" style="${p}">${fmt(b.rev_fy26)}</td>
+      <td class="num" style="${p};color:var(--red);">${fmt(b.sga_fy26)}</td>
+      <td class="num ${net26>=0?'variance-positive':'variance-negative'}" style="${p};font-weight:700;">${fmt(net26)}</td>
+      <td class="num" style="${p}">${fmt(net27)}</td>
+    </tr>`;
+  }
+
+  // Approved table
+  const aBody = document.getElementById('approvedBody');
+  if (aBody) {
+    let html = approved.sort((a,b)=>(b.rev_fy26+b.sga_fy26)-(a.rev_fy26+a.sga_fy26)).map(b=>betRow(b)).join('');
+    html += `<tr class="total-row"><td style="padding:7px 8px;font-size:11px;">TOTAL APPROVED</td>
+      <td class="num" style="padding:7px 8px;">${fmt(aSum.r26)}</td>
+      <td class="num" style="padding:7px 8px;">${fmt(aSum.s26)}</td>
+      <td class="num" style="padding:7px 8px;color:#4ade80;font-weight:800;">${fmt(aSum.n26)}</td>
+      <td class="num" style="padding:7px 8px;">${fmt(aSum.n27)}</td></tr>`;
+    aBody.innerHTML = html;
+  }
+
+  // Pending table
+  const pBody = document.getElementById('pendingBody');
+  if (pBody) {
+    let html = pending.sort((a,b)=>Math.abs(b.rev_fy26+b.sga_fy26)-Math.abs(a.rev_fy26+a.sga_fy26)).map(b=>betRow(b)).join('');
+    html += `<tr class="total-row" style="background:#92400e;"><td style="padding:7px 8px;font-size:11px;">TOTAL PENDING</td>
+      <td class="num" style="padding:7px 8px;">${fmt(pSum.r26)}</td>
+      <td class="num" style="padding:7px 8px;">${fmt(pSum.s26)}</td>
+      <td class="num" style="padding:7px 8px;color:#fde68a;font-weight:800;">${fmt(pSum.n26)}</td>
+      <td class="num" style="padding:7px 8px;">${fmt(pSum.n27)}</td></tr>`;
+    pBody.innerHTML = html;
+  }
+
+  // Top pending spotlight cards
+  const topCards = document.getElementById('topPendingCards');
+  if (topCards) {
+    const top5 = [...pending].sort((a,b)=>Math.abs(b.rev_fy26+b.sga_fy26)-Math.abs(a.rev_fy26+a.sga_fy26)).slice(0,5);
+    if (top5.length === 0) {
+      topCards.innerHTML = '<p style="color:var(--gray-500);font-size:12px;padding:8px;">No pending bets currently.</p>';
+    } else {
+      topCards.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;">' +
+        top5.map(b=>{
+          const net26 = b.rev_fy26+b.sga_fy26;
+          const net27 = b.rev_fy27+b.sga_fy27;
+          const color = AREA_COLORS[b.area]||'#374151';
+          const st = BET_STATUS[b.bet_name];
+          const rag = st ? (st.color==='green'?'🟢':st.color==='yellow'?'🟡':'🔴') : '⚪';
+          return `<div style="background:#fff;border-radius:10px;padding:16px;border:2px solid #fde68a;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px;">
+              <div>
+                <div style="font-size:12px;font-weight:700;color:var(--gray-800);line-height:1.3;">${b.bet_name}</div>
+                <div style="font-size:10px;color:${color};font-weight:600;margin-top:2px;">${b.area}</div>
+              </div>
+              <span style="font-size:10px;background:#fef3c7;color:#92400e;border-radius:4px;padding:2px 7px;font-weight:700;white-space:nowrap;flex-shrink:0;">⏳ Pending</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;">
+              <div style="background:var(--gray-50);border-radius:6px;padding:8px;">
+                <div style="font-size:9px;font-weight:700;text-transform:uppercase;color:var(--gray-400);">FY26 Net</div>
+                <div style="font-size:16px;font-weight:800;color:${net26>=0?'var(--grpn-green-dark)':'var(--red)'};">${fmt(net26)}</div>
+              </div>
+              <div style="background:var(--gray-50);border-radius:6px;padding:8px;">
+                <div style="font-size:9px;font-weight:700;text-transform:uppercase;color:var(--gray-400);">FY27 Net</div>
+                <div style="font-size:16px;font-weight:800;color:${net27>=0?'var(--grpn-green-dark)':'var(--red)'};">${fmt(net27)}</div>
+              </div>
+            </div>
+            <div style="font-size:10.5px;color:var(--gray-600);margin-bottom:10px;">${rag} ${st ? st.text.substring(0,90)+(st.text.length>90?'…':'') : 'No status available'}</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              ${asanaLink(b.bet_name)}${valueViewLink(b.area)}
+            </div>
+          </div>`;
+        }).join('') + '</div>';
+    }
+  }
+}
+
+function renderSummary() {
+  const bets = computeMarchBets();
+  const tbody = document.getElementById('summaryBody');
+  if (!tbody) return;
+  let html = '';
+  
+  const areaData = {};
+  AREA_ORDER.forEach(a => areaData[a] = {rev_q1:0,rev_q2:0,rev_q3:0,rev_q4:0,rev_fy26:0,rev_fy27:0,sga_q1:0,sga_q2:0,sga_q3:0,sga_q4:0,sga_fy26:0,sga_fy27:0});
+  
+  for (const b of bets) {
+    if (!areaData[b.area]) continue;
+    for (const k of ['q1','q2','q3','q4','fy26','fy27']) {
+      areaData[b.area]['rev_'+k] += b['rev_'+k];
+      areaData[b.area]['sga_'+k] += b['sga_'+k];
+    }
+  }
+  
+  const totals = {rev_q1:0,rev_q2:0,rev_q3:0,rev_q4:0,rev_fy26:0,rev_fy27:0,sga_q1:0,sga_q2:0,sga_q3:0,sga_q4:0,sga_fy26:0,sga_fy27:0};
+  
+  for (const area of AREA_ORDER) {
+    const d = areaData[area];
+    const color = AREA_COLORS[area] || '#374151';
+    html += `<tr class="area-header"><td colspan="8" style="color:${color};background:${color}11;border-left:3px solid ${color};">${area}</td></tr>`;
+    
+    // Revenue row
+    const rn = d.rev_fy26 !== 0;
+    html += `<tr class="revenue-line">
+      <td style="padding-left:20px;color:var(--gray-500);font-size:11px;">M1+VFM (Revenue)</td>
+      <td></td>
+      <td class="num">${fmt(d.rev_q1)}</td>
+      <td class="num">${fmt(d.rev_q2)}</td>
+      <td class="num">${fmt(d.rev_q3)}</td>
+      <td class="num">${fmt(d.rev_q4)}</td>
+      <td class="num" style="background:var(--gray-50);font-weight:700;">${fmt(d.rev_fy26)}</td>
+      <td class="num" style="background:#e0f2fe;">${fmt(d.rev_fy27)}</td>
+    </tr>`;
+    
+    // SG&A row
+    html += `<tr class="sga-line">
+      <td style="padding-left:20px;color:var(--gray-500);font-size:11px;">SG&A</td>
+      <td></td>
+      <td class="num">${fmt(d.sga_q1)}</td>
+      <td class="num">${fmt(d.sga_q2)}</td>
+      <td class="num">${fmt(d.sga_q3)}</td>
+      <td class="num">${fmt(d.sga_q4)}</td>
+      <td class="num" style="background:var(--gray-50);font-weight:700;">${fmt(d.sga_fy26)}</td>
+      <td class="num" style="background:#e0f2fe;">${fmt(d.sga_fy27)}</td>
+    </tr>`;
+    
+    // Net Impact
+    const net = {q1:d.rev_q1+d.sga_q1, q2:d.rev_q2+d.sga_q2, q3:d.rev_q3+d.sga_q3, q4:d.rev_q4+d.sga_q4, fy26:d.rev_fy26+d.sga_fy26, fy27:d.rev_fy27+d.sga_fy27};
+    html += `<tr class="subtotal">
+      <td style="padding-left:20px;">Net Impact</td>
+      <td></td>
+      <td class="num">${fmt(net.q1)}</td>
+      <td class="num">${fmt(net.q2)}</td>
+      <td class="num">${fmt(net.q3)}</td>
+      <td class="num">${fmt(net.q4)}</td>
+      <td class="num" style="background:var(--gray-100);">${fmt(net.fy26)}</td>
+      <td class="num" style="background:#dbeafe;">${fmt(net.fy27)}</td>
+    </tr>`;
+    
+    for (const k of ['q1','q2','q3','q4','fy26','fy27']) {
+      totals['rev_'+k] += d['rev_'+k];
+      totals['sga_'+k] += d['sga_'+k];
+    }
+  }
+  
+  // Grand Total
+  html += `<tr class="total-row">
+    <td colspan="2" style="font-size:12px;">GRAND TOTAL REVENUE</td>
+    <td class="num">${fmt(totals.rev_q1)}</td>
+    <td class="num">${fmt(totals.rev_q2)}</td>
+    <td class="num">${fmt(totals.rev_q3)}</td>
+    <td class="num">${fmt(totals.rev_q4)}</td>
+    <td class="num">${fmt(totals.rev_fy26)}</td>
+    <td class="num">${fmt(totals.rev_fy27)}</td>
+  </tr>
+  <tr class="total-row" style="background:#1c3a12;">
+    <td colspan="2" style="font-size:12px;">GRAND TOTAL SG&A</td>
+    <td class="num">${fmt(totals.sga_q1)}</td>
+    <td class="num">${fmt(totals.sga_q2)}</td>
+    <td class="num">${fmt(totals.sga_q3)}</td>
+    <td class="num">${fmt(totals.sga_q4)}</td>
+    <td class="num">${fmt(totals.sga_fy26)}</td>
+    <td class="num">${fmt(totals.sga_fy27)}</td>
+  </tr>`;
+  
+  const gnet = {q1:totals.rev_q1+totals.sga_q1, q2:totals.rev_q2+totals.sga_q2, q3:totals.rev_q3+totals.sga_q3, q4:totals.rev_q4+totals.sga_q4, fy26:totals.rev_fy26+totals.sga_fy26, fy27:totals.rev_fy27+totals.sga_fy27};
+  html += `<tr class="total-row" style="background:#111;border-top:2px solid var(--grpn-green);">
+    <td colspan="2" style="font-size:12px;color:var(--grpn-green);">NET TOTAL IMPACT</td>
+    <td class="num" style="color:${gnet.q1>=0?'#4ade80':'#f87171'}">${fmt(gnet.q1)}</td>
+    <td class="num" style="color:${gnet.q2>=0?'#4ade80':'#f87171'}">${fmt(gnet.q2)}</td>
+    <td class="num" style="color:${gnet.q3>=0?'#4ade80':'#f87171'}">${fmt(gnet.q3)}</td>
+    <td class="num" style="color:${gnet.q4>=0?'#4ade80':'#f87171'}">${fmt(gnet.q4)}</td>
+    <td class="num" style="color:${gnet.fy26>=0?'#4ade80':'#f87171'}">${fmt(gnet.fy26)}</td>
+    <td class="num" style="color:${gnet.fy27>=0?'#4ade80':'#f87171'}">${fmt(gnet.fy27)}</td>
+  </tr>`;
+  
+  tbody.innerHTML = html;
+  
+  // Update hero
+  document.getElementById('h-rev').textContent = fmt(totals.rev_fy26);
+  document.getElementById('h-sga').textContent = fmt(totals.sga_fy26);
+  document.getElementById('h-net').textContent = fmt(gnet.fy26);
+  document.getElementById('h-rev27').textContent = fmt(totals.rev_fy27);
+  document.getElementById('h-bets').textContent = [...new Set(computeMarchBets().map(b=>b.bet_name))].length;
+}
+
+// =============================================
+// RENDER SECTION 2: BET DETAIL
+// =============================================
+function renderDetail() {
+  const bets = computeMarchBets();
+  const tbody = document.getElementById('detailBody');
+  if (!tbody) return;
+  
+  bets.sort((a,b) => AREA_ORDER.indexOf(a.area) - AREA_ORDER.indexOf(b.area));
+  
+  let html = '';
+  let lastArea = '';
+  for (const b of bets) {
+    if (b.area !== lastArea) {
+      const color = AREA_COLORS[b.area] || '#374151';
+      html += `<tr class="area-header"><td colspan="10" style="color:${color};background:${color}11;border-left:3px solid ${color};">${b.area}</td></tr>`;
+      lastArea = b.area;
+    }
+    const net26 = b.rev_fy26 + b.sga_fy26;
+    const net27 = b.rev_fy27 + b.sga_fy27;
+    const st = BET_STATUS[b.bet_name];
+    const stIcon = st ? `<span class="status-circle ${st.color==='green'?'status-green':st.color==='yellow'?'status-yellow':'status-red'}" style="width:12px;height:12px;display:inline-block;border-radius:50%;"></span>` : '<span class="status-circle status-gray" style="width:12px;height:12px;display:inline-block;border-radius:50%;"></span>';
+    const stText = st ? `<span style="font-size:10px;color:var(--gray-600);">${st.text.substring(0,100)}${st.text.length>100?'…':''}</span>` : '<span style="font-size:10px;color:var(--gray-400);">No status available</span>';
+    
+    html += `<tr class="bet-detail">
+      <td></td>
+      <td style="font-size:12px;max-width:220px;word-break:break-word;">
+        <span style="display:flex;align-items:center;gap:2px;flex-wrap:wrap;">${b.bet_name}${approvalBadge(b.bet_name,true)}${asanaLink(b.bet_name)}${valueViewLink(b.area)}</span>
+      </td>
+      <td class="num">${fmt(b.rev_fy26)}</td>
+      <td class="num" style="color:var(--red);">${fmt(b.sga_fy26)}</td>
+      <td class="num ${net26>=0?'variance-positive':'variance-negative'}">${fmt(net26)}</td>
+      <td class="num">${fmt(b.rev_fy27)}</td>
+      <td class="num" style="color:var(--red);">${fmt(b.sga_fy27)}</td>
+      <td class="num ${net27>=0?'variance-positive':'variance-negative'}">${fmt(net27)}</td>
+      <td style="text-align:center;">${stIcon}</td>
+      <td>${stText}</td>
+    </tr>`;
+  }
+  
+  tbody.innerHTML = html;
+}
+
+// =============================================
+// RENDER SECTION 3: COMPARISON (quarterly)
+// =============================================
+function renderComparison() {
+  const marchBets = computeMarchBets();
+  const initBets  = computeInitBets();
+
+  const marchMap = {};
+  for (const b of marchBets) marchMap[b.bet_name] = b;
+
+  const initMap = {};
+  for (const b of initBets) {
+    initMap[b.bet_name] = b;
+    const mn = REVERSE_NAME_MAP[b.bet_name] || b.bet_name;
+    initMap[mn] = b;
+  }
+
+  const tbody = document.getElementById('compareBody');
+  if (!tbody) return;
+
+  const allMarchNames = [...new Set(MARCH_RAW.map(r => r.bet_name))]
+    .filter(n => !isApprovalFiltered(n));
+  allMarchNames.sort((a, b) => AREA_ORDER.indexOf(betAreaMap[a]) - AREA_ORDER.indexOf(betAreaMap[b]));
+
+  const QS = ['q1','q2','q3','q4','fy26'];
+
+  // Helper: render one Jan/Mar/Var triple for a given period key
+  function triple(iv, mv, isBold) {
+    const v = mv - iv;
+    const bld = isBold ? 'font-weight:800;' : '';
+    const p = 'padding:5px 5px;';
+    return `<td class="num" style="background:#1e3a8a08;${bld}${p}">${fmt(iv)}</td>
+            <td class="num" style="background:#14532d08;${bld}${p}">${fmt(mv)}</td>
+            <td class="num" style="${v===0?'color:var(--gray-400)':v>0?'color:var(--grpn-green);font-weight:700':'color:var(--red);font-weight:700'};border-right:2px solid #e5e7eb;${bld}${p}">${v===0?'–':(v>0?'+':'')+fmt(v)}</td>`;
+  }
+
+  let html = '';
+  const areasRendered = new Set();
+
+  for (const betName of allMarchNames) {
+    const area = betAreaMap[betName];
+
+    if (!areasRendered.has(area)) {
+      const color = AREA_COLORS[area] || '#374151';
+      html += `<tr class="area-header"><td colspan="18" style="color:${color};background:${color}11;border-left:3px solid ${color};">${area}</td></tr>`;
+      areasRendered.add(area);
+    }
+
+    const mb = marchMap[betName];
+    const ib = initMap[betName];
+    const isNew = !ib;
+
+    // Values for each period: rev, sga, net
+    const vals = {};
+    for (const q of QS) {
+      vals[q] = {
+        irev: ib ? (ib['rev_'+q]||0) : 0,
+        mrev: mb ? (mb['rev_'+q]||0) : 0,
+        isga: ib ? (ib['sga_'+q]||0) : 0,
+        msga: mb ? (mb['sga_'+q]||0) : 0,
+      };
+      vals[q].inet = vals[q].irev + vals[q].isga;
+      vals[q].mnet = vals[q].mrev + vals[q].msga;
+    }
+
+    // Tag
+    let tag = '';
+    if (isNew) tag = '<span class="pill pill-blue">New Bet</span>';
+    else if (vals.fy26.mrev < vals.fy26.irev * 0.9 && vals.fy26.irev !== 0) tag = '<span class="pill pill-yellow">Execution Delayed</span>';
+
+    const betStyle = 'font-size:11.5px;font-weight:600;vertical-align:middle;position:sticky;left:0;background:#fff;z-index:1;max-width:150px;word-break:break-word;padding:5px 8px;';
+    const tagStyle = 'vertical-align:middle;position:sticky;right:0;background:#fff;z-index:1;padding:5px 8px;white-space:nowrap;';
+    const metricStyle = 'font-size:10px;color:var(--gray-500);white-space:nowrap;padding:5px 4px;';
+    const betCell = `<span style="display:flex;align-items:flex-start;gap:3px;flex-wrap:wrap;">${betName}${approvalBadge(betName,true)}${asanaLink(betName)}${valueViewLink(area)}</span>`;
+
+    // Revenue row
+    html += `<tr style="border-top:2px solid var(--gray-100);">
+      <td rowspan="3" style="${betStyle}">${betCell}</td>
+      <td style="${metricStyle}color:var(--grpn-green-dark);font-weight:600;">Revenue</td>
+      ${triple(vals.q1.irev, vals.q1.mrev, false)}
+      ${triple(vals.q2.irev, vals.q2.mrev, false)}
+      ${triple(vals.q3.irev, vals.q3.mrev, false)}
+      ${triple(vals.q4.irev, vals.q4.mrev, false)}
+      ${triple(vals.fy26.irev, vals.fy26.mrev, true)}
+      <td rowspan="3" style="${tagStyle}">${tag}</td>
+    </tr>`;
+
+    // SG&A row
+    html += `<tr>
+      <td style="${metricStyle}color:var(--red);">SG&A</td>
+      ${triple(vals.q1.isga, vals.q1.msga, false)}
+      ${triple(vals.q2.isga, vals.q2.msga, false)}
+      ${triple(vals.q3.isga, vals.q3.msga, false)}
+      ${triple(vals.q4.isga, vals.q4.msga, false)}
+      ${triple(vals.fy26.isga, vals.fy26.msga, true)}
+    </tr>`;
+
+    // Net row
+    html += `<tr style="background:var(--gray-50);">
+      <td style="${metricStyle}font-weight:700;color:var(--gray-700);">Net</td>
+      ${triple(vals.q1.inet, vals.q1.mnet, false)}
+      ${triple(vals.q2.inet, vals.q2.mnet, false)}
+      ${triple(vals.q3.inet, vals.q3.mnet, false)}
+      ${triple(vals.q4.inet, vals.q4.mnet, false)}
+      ${triple(vals.fy26.inet, vals.fy26.mnet, true)}
+    </tr>`;
+  }
+
+  // Canceled bets
+  const canceledInScope = CANCELED_BETS.filter(n => inclState[n] && inclState[n].init);
+  if (canceledInScope.length > 0) {
+    html += `<tr class="area-header"><td colspan="18" style="color:#dc2626;background:#fef2f2;border-left:3px solid #dc2626;">CANCELED / REMOVED BETS</td></tr>`;
+    for (const betName of canceledInScope) {
+      const ib = initMap[betName];
+      const betStyle = 'font-size:11.5px;font-weight:600;vertical-align:middle;position:sticky;left:0;background:#fff2f2;z-index:1;color:var(--gray-400);text-decoration:line-through;max-width:150px;padding:5px 8px;';
+      const tagStyle = 'vertical-align:middle;position:sticky;right:0;background:#fef2f2;z-index:1;padding:5px 8px;white-space:nowrap;';
+      const metricStyle = 'font-size:10px;white-space:nowrap;padding:5px 4px;';
+      const canceledArea = getCanceledArea(betName) || '';
+      const betCell = `<span style="display:flex;align-items:flex-start;gap:3px;flex-wrap:wrap;">${betName}${approvalBadge(betName,true)}${asanaLink(betName)}${valueViewLink(canceledArea)}</span>`;
+
+      const vals = {};
+      for (const q of QS) {
+        vals[q] = {
+          irev: ib ? (ib['rev_'+q]||0) : 0, mrev: 0,
+          isga: ib ? (ib['sga_'+q]||0) : 0, msga: 0,
+        };
+        vals[q].inet = vals[q].irev + vals[q].isga;
+        vals[q].mnet = 0;
+      }
+
+      html += `<tr style="background:#fef9f9;border-top:2px solid #fee2e2;">
+        <td rowspan="3" style="${betStyle}">${betCell}</td>
+        <td style="${metricStyle}color:var(--grpn-green-dark);">Revenue</td>
+        ${triple(vals.q1.irev,0,false)}${triple(vals.q2.irev,0,false)}${triple(vals.q3.irev,0,false)}${triple(vals.q4.irev,0,false)}${triple(vals.fy26.irev,0,true)}
+        <td rowspan="3" style="${tagStyle}"><span class="pill pill-red">Canceled</span></td>
+      </tr>
+      <tr style="background:#fef9f9;">
+        <td style="${metricStyle}color:var(--red);">SG&A</td>
+        ${triple(vals.q1.isga,0,false)}${triple(vals.q2.isga,0,false)}${triple(vals.q3.isga,0,false)}${triple(vals.q4.isga,0,false)}${triple(vals.fy26.isga,0,true)}
+      </tr>
+      <tr style="background:#fef0f0;">
+        <td style="${metricStyle}font-weight:700;">Net</td>
+        ${triple(vals.q1.inet,0,false)}${triple(vals.q2.inet,0,false)}${triple(vals.q3.inet,0,false)}${triple(vals.q4.inet,0,false)}${triple(vals.fy26.inet,0,true)}
+      </tr>`;
+    }
+  }
+
+  tbody.innerHTML = html;
+}
+
+// =============================================
+// RENDER QUARTERLY STACKED CHART
+// =============================================
+let quarterlyChartObj = null;
+
+function renderQuarterlyChart() {
+  const canvas = document.getElementById('quarterlyChart');
+  const legend = document.getElementById('quarterlyLegend');
+  if (!canvas) return;
+
+  const bets = computeMarchBets();
+
+  // Build per-area per-quarter net data
+  const areaQ = {};
+  AREA_ORDER.forEach(a => areaQ[a] = {q1:0, q2:0, q3:0, q4:0});
+  for (const b of bets) {
+    if (!areaQ[b.area]) continue;
+    areaQ[b.area].q1 += b.rev_q1 + b.sga_q1;
+    areaQ[b.area].q2 += b.rev_q2 + b.sga_q2;
+    areaQ[b.area].q3 += b.rev_q3 + b.sga_q3;
+    areaQ[b.area].q4 += b.rev_q4 + b.sga_q4;
+  }
+
+  // Build datasets — one per area
+  const datasets = AREA_ORDER.map(area => ({
+    label: area,
+    data: [areaQ[area].q1, areaQ[area].q2, areaQ[area].q3, areaQ[area].q4],
+    backgroundColor: AREA_COLORS[area] + 'cc',
+    borderColor: AREA_COLORS[area],
+    borderWidth: 1,
+    borderRadius: 2,
+    stack: 'positive',
+  }));
+
+  // Total line dataset
+  const totals = ['q1','q2','q3','q4'].map(q => AREA_ORDER.reduce((s,a) => s + areaQ[a][q], 0));
+  datasets.push({
+    label: 'Total Net',
+    data: totals,
+    type: 'line',
+    borderColor: '#111827',
+    backgroundColor: 'transparent',
+    borderWidth: 2.5,
+    pointBackgroundColor: '#111827',
+    pointRadius: 5,
+    pointHoverRadius: 7,
+    tension: 0.3,
+    stack: undefined,
+    order: 0,
+    datalabels: {display: false}
+  });
+
+  if (quarterlyChartObj) { quarterlyChartObj.destroy(); quarterlyChartObj = null; }
+
+  quarterlyChartObj = new Chart(canvas, {
+    type: 'bar',
+    data: { labels: ['Q1 2026', 'Q2 2026', 'Q3 2026', 'Q4 2026'], datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index' },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              if (ctx.dataset.label === 'Total Net') return `  Total: ${fmt(ctx.raw)}`;
+              const v = ctx.raw;
+              if (v === 0) return null;
+              return `  ${ctx.dataset.label}: ${fmt(v)}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: { stacked: true, grid: { display: false } },
+        y: {
+          stacked: true,
+          ticks: { callback: v => fmt(v) },
+          grid: { color: '#f3f4f6' }
+        }
+      }
+    }
+  });
+
+  // Render legend
+  if (legend) {
+    let lhtml = '<div style="display:flex;flex-direction:column;gap:6px;">';
+    AREA_ORDER.forEach(area => {
+      const net = areaQ[area].q1 + areaQ[area].q2 + areaQ[area].q3 + areaQ[area].q4;
+      if (net === 0) return;
+      lhtml += `<div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:12px;height:12px;border-radius:2px;background:${AREA_COLORS[area]};flex-shrink:0;"></div>
+        <div style="font-size:11px;flex:1;color:var(--gray-700);">${area}</div>
+        <div style="font-size:11px;font-weight:700;color:${net>=0?'var(--grpn-green-dark)':'var(--red)'};">${fmt(net)}</div>
+      </div>`;
+    });
+    const totalNet = totals.reduce((s,v)=>s+v,0);
+    lhtml += `<div style="display:flex;align-items:center;gap:8px;border-top:2px solid var(--gray-200);padding-top:6px;margin-top:2px;">
+      <div style="width:12px;height:3px;background:#111827;flex-shrink:0;"></div>
+      <div style="font-size:11px;flex:1;font-weight:700;">Total</div>
+      <div style="font-size:12px;font-weight:800;color:${totalNet>=0?'var(--grpn-green-dark)':'var(--red)'};">${fmt(totalNet)}</div>
+    </div>`;
+    lhtml += '</div>';
+    legend.innerHTML = lhtml;
+  }
+}
+
+
+// =============================================
+// RENDER SECTION 5: JAN/FEB ACTUALS COMPARISON (combined)
+// =============================================
+const ACTUALS_COMMENTARY = {
+  "2026 Wishlists Online": "At Risk: Only 3/10 target products live. Outreach severely below target (117 contacts → 2 active). Jan below OP plan; Feb recovering but still lagging.",
+  "Customisable Private Label SignaturePrintLab": "On Track: Pilot launched under SignaturePrintLab brand. >800 units. Jan below OP (delayed launch), Feb improving. Operations stabilising.",
+  "Sponsored Marketing Activities – Build a Profitable Process": "Started: $150K pilot (License Tom) live W10. Jan missed OP plan — delayed launch. Feb strong at $175K, beating OP ($75K) as pilot ramped up.",
+  "Competitor scraping for sales opportunities": "Execution Delayed: No revenue realised in Jan/Feb vs OP plan of $6K/month. Scraping tool still being deployed. SGA costs running as planned.",
+  "New Business Improvement Initiatives (Europe, Local)": "Mixed: Jan negative (-$28K actual vs +$52K OP plan) driven by UAE/INTL timing. Feb recovered to $54K inline with OP. QTD pacing improving with Ramadan uplift.",
+  "Q1 MD Process Europe | Framework roll-out": "Execution Delayed: No Jan/Feb revenue vs $123K/month OP plan. Framework deployment in progress; revenue ramp now expected from Mar onward.",
+  "Portfolio NVR expansion": "Above Plan: Jan $91K vs OP $40K (+128%). Feb $190K vs OP $45K (+322%). HBW portfolio expansion executing well ahead of initial forecast.",
+  "High AOV": "Execution Delayed: No Jan/Feb revenue vs OP $30K Feb plan. Revised forecast pushes revenue start to Q2. Regulatory review and pipeline build ongoing.",
+  "Geographic Expansion": "Execution Delayed: No Jan/Feb revenue vs OP $15K/month plan. Jiri confirmed technical feasibility; Product scoping in progress. Revenue expected Q2.",
+  "Hotel Trader properties scale-up": "At Risk: No Jan/Feb revenue vs OP $5.4K/month plan. QTD M1VFM <$1K. Blocked by MLOS/blackout functionality issues. 4 properties live but technical constraints limiting scale.",
+  "GWL Deals: Enabling Gifting + New deal page layout": "Execution Delayed: No revenue in Jan/Feb vs OP $13.5K/month plan. New deal page live for all GWL deals (+3.6% CVR). Gifting enablement deprioritised to Q2.",
+  "Connectivity - TixTrax": "On Track: Jan/Feb both at $6K — in line with OP plan. QTD M1VFM $16K as of March 16th. Pricing override work completed.",
+  "Connectivity - Outbox": "On Track: Jan/Feb both at $3K — in line with OP plan. QTD M1VFM $9K. Cirque du Soleil shows ramping up."
+};
+
+function renderActuals() {
+  const tbody = document.getElementById('actualsBody');
+  if (!tbody) return;
+
+  const data = ACTUALS_DATA.filter(d => {
+    const ms = inclState[d.bet_name];
+    if (!ms || (ms.march === false || ms.init === false)) return false;
+    if (isApprovalFiltered(d.bet_name)) return false;
+    return true;
+  });
+
+  const p = 'padding:5px 8px;';
+  let html = '';
+  let lastArea = '';
+  let totI1Rev=0, totI2Rev=0, totI1Sga=0, totI2Sga=0;
+
+  function numCell(v, extraStyle) {
+    const s = extraStyle || '';
+    if (!v || v === 0) return '<td style="text-align:right;' + p + 'color:var(--gray-300);' + s + '">–</td>';
+    return '<td style="text-align:right;' + p + s + '">' + fmt(v) + '</td>';
+  }
+  function deltaCell(v2, v1, extraStyle) {
+    const d = v2 - v1;
+    const s = extraStyle || '';
+    if (d === 0 && v1 === 0 && v2 === 0) return '<td style="text-align:right;' + p + 'color:var(--gray-300);' + s + '">–</td>';
+    const col = d > 0 ? 'var(--grpn-green)' : d < 0 ? 'var(--red)' : 'var(--gray-400)';
+    const sign = d > 0 ? '+' : '';
+    return '<td style="text-align:right;' + p + 'font-weight:700;color:' + col + ';' + s + '">' + (d === 0 ? '–' : sign + fmt(d)) + '</td>';
+  }
+
+  for (const d of data) {
+    const color = AREA_COLORS[d.area] || '#374151';
+    const i1r = d.i1_rev_jan + d.i1_rev_feb;
+    const i2r = d.i2_rev_jan + d.i2_rev_feb;
+    const i1s = d.i1_sga_jan + d.i1_sga_feb;
+    const i2s = d.i2_sga_jan + d.i2_sga_feb;
+    const i1n = i1r + i1s;
+    const i2n = i2r + i2s;
+    const cmt = ACTUALS_COMMENTARY[d.bet_name] || '';
+
+    // Area header — exactly 6 cells via colspan
+    if (d.area !== lastArea) {
+      html += '<tr class="area-header" style="background:' + color + '11;border-left:3px solid ' + color + ';">'
+            + '<td colspan="6" style="color:' + color + ';font-weight:800;font-size:11px;text-transform:uppercase;' + p + '">' + d.area + '</td>'
+            + '</tr>';
+      lastArea = d.area;
+    }
+
+    // Row 1 — Revenue (6 cells: name, label, i1r, i2r, delta, commentary)
+    html += '<tr style="border-top:2px solid var(--gray-100);">'
+          + '<td style="font-size:11.5px;font-weight:600;' + p + 'max-width:180px;word-break:break-word;">'
+          +   '<div style="display:flex;align-items:center;gap:3px;flex-wrap:wrap;">' + d.bet_name + approvalBadge(d.bet_name, true) + '</div>'
+          +   '<div style="margin-top:3px;display:flex;gap:4px;flex-wrap:wrap;">' + asanaLink(d.bet_name) + valueViewLink(d.area) + '</div>'
+          + '</td>'
+          + '<td style="font-size:10px;color:var(--grpn-green-dark);font-weight:600;' + p + '">Revenue</td>'
+          + numCell(i1r) + numCell(i2r, 'font-weight:700;') + deltaCell(i2r, i1r)
+          + '<td style="font-size:10.5px;color:var(--gray-700);vertical-align:top;' + p + 'line-height:1.45;border-left:2px solid var(--gray-100);" rowspan="3">' + cmt + '</td>'
+          + '</tr>';
+
+    // Row 2 — SG&A (5 cells — commentary is rowspan="3" from row 1 so no 6th cell needed)
+    html += '<tr>'
+          + '<td style="' + p + '"></td>'
+          + '<td style="font-size:10px;color:var(--red);' + p + '">SG&A</td>'
+          + numCell(i1s, 'color:var(--red);') + numCell(i2s, 'color:var(--red);') + deltaCell(i2s, i1s)
+          + '</tr>';
+
+    // Row 3 — Net (5 cells)
+    html += '<tr style="background:var(--gray-50);">'
+          + '<td style="' + p + '"></td>'
+          + '<td style="font-size:10px;font-weight:700;' + p + '">Net</td>'
+          + '<td style="text-align:right;' + p + 'font-weight:700;">' + fmt(i1n) + '</td>'
+          + '<td style="text-align:right;' + p + 'font-weight:700;">' + fmt(i2n) + '</td>'
+          + deltaCell(i2n, i1n)
+          + '</tr>';
+
+    totI1Rev += i1r; totI2Rev += i2r; totI1Sga += i1s; totI2Sga += i2s;
+  }
+
+  // Totals — 6 cells each (last cell empty to fill commentary column)
+  const gn1 = totI1Rev + totI1Sga, gn2 = totI2Rev + totI2Sga;
+  const dn = gn2 - gn1;
+  html += '<tr class="total-row" style="border-top:3px solid var(--grpn-green);">'
+        + '<td colspan="2" style="padding:7px 8px;font-size:11px;">TOTAL Revenue</td>'
+        + '<td class="num" style="padding:7px 8px;">' + fmt(totI1Rev) + '</td>'
+        + '<td class="num" style="padding:7px 8px;font-weight:800;">' + fmt(totI2Rev) + '</td>'
+        + '<td class="num" style="padding:7px 8px;font-weight:800;color:' + (totI2Rev >= totI1Rev ? '#4ade80' : '#f87171') + ';">' + (totI2Rev === totI1Rev ? '–' : (totI2Rev > totI1Rev ? '+' : '') + fmt(totI2Rev - totI1Rev)) + '</td>'
+        + '<td style="padding:7px 8px;"></td>'
+        + '</tr>'
+        + '<tr class="total-row" style="background:#1c3a12;">'
+        + '<td colspan="2" style="padding:7px 8px;font-size:11px;">TOTAL SG&A</td>'
+        + '<td class="num" style="padding:7px 8px;">' + fmt(totI1Sga) + '</td>'
+        + '<td class="num" style="padding:7px 8px;font-weight:800;">' + fmt(totI2Sga) + '</td>'
+        + '<td class="num" style="padding:7px 8px;font-weight:800;color:' + (totI2Sga <= totI1Sga ? '#4ade80' : '#f87171') + ';">' + (totI2Sga === totI1Sga ? '–' : (totI2Sga > totI1Sga ? '+' : '') + fmt(totI2Sga - totI1Sga)) + '</td>'
+        + '<td style="padding:7px 8px;"></td>'
+        + '</tr>'
+        + '<tr class="total-row" style="background:#111;border-top:2px solid var(--grpn-green);">'
+        + '<td colspan="2" style="padding:7px 8px;font-size:12px;color:var(--grpn-green);font-weight:800;">NET TOTAL</td>'
+        + '<td class="num" style="padding:7px 8px;font-weight:800;color:' + (gn1 >= 0 ? '#4ade80' : '#f87171') + ';">' + fmt(gn1) + '</td>'
+        + '<td class="num" style="padding:7px 8px;font-weight:800;color:' + (gn2 >= 0 ? '#4ade80' : '#f87171') + ';">' + fmt(gn2) + '</td>'
+        + '<td class="num" style="padding:7px 8px;font-weight:800;color:' + (dn >= 0 ? '#4ade80' : '#f87171') + ';">' + (dn === 0 ? '–' : (dn > 0 ? '+' : '') + fmt(dn)) + '</td>'
+        + '<td style="padding:7px 8px;"></td>'
+        + '</tr>';
+
+  tbody.innerHTML = html;
+}
+
+// =============================================
+// RENDER SECTION 4: WATERFALL
+// =============================================
+let wfCharts = {};
+
+function computeWaterfallData(filterArea) {
+  const marchBets = computeMarchBets();  // already filtered by inclState.march
+  const initBets  = computeInitBets();   // already filtered by inclState.init
+
+  // Maps from included bets only
+  const marchMap = {};
+  for (const b of marchBets) marchMap[b.bet_name] = b;
+
+  const initMap = {};
+  for (const b of initBets) {
+    initMap[b.bet_name] = b;
+    const mn = REVERSE_NAME_MAP[b.bet_name] || b.bet_name;
+    initMap[mn] = b;
+  }
+
+  // Raw set: which bet names exist in init data at all (regardless of inclState)
+  const initRawNames = new Set(INIT_RAW.map(r => r.bet_name));
+  const existsInInit = n => initRawNames.has(n) || initRawNames.has(NAME_MAP[n]);
+
+  // --- 1. Jan total (respects inclState.init) ---
+  let janTotal = 0;
+  for (const n of [...new Set(INIT_RAW.map(r => r.bet_name))]) {
+    const ib = initMap[n];
+    if (!ib) continue;
+    const mn   = REVERSE_NAME_MAP[n] || n;
+    const area = betAreaMap[mn] || (CANCELED_BETS.includes(n) ? getCanceledArea(n) : null);
+    if (filterArea && area !== filterArea) continue;
+    janTotal += ib.rev_fy26 + ib.sga_fy26;
+  }
+
+  // --- 2. March total (respects inclState.march) ---
+  let marchTotal = 0;
+  for (const b of marchBets) {
+    if (filterArea && b.area !== filterArea) continue;
+    marchTotal += b.rev_fy26 + b.sga_fy26;
+  }
+
+  // --- 3. Classify each march bet explicitly ---
+  let newBetsImpact    = 0;
+  let reforecastImpact = 0;
+  let canceledImpact   = 0;
+
+  const allMarchNames = [...new Set(MARCH_RAW.map(r => r.bet_name))];
+
+  for (const n of allMarchNames) {
+    if (filterArea && betAreaMap[n] !== filterArea) continue;
+
+    const marchIncluded = (inclState[n] || {march:true}).march !== false;
+    const inInit        = existsInInit(n);
+    const mb            = marchMap[n];   // present only if marchIncluded
+    const ib            = initMap[n];    // present only if inclState.init is true
+
+    if (marchIncluded) {
+      const mbNet = mb ? mb.rev_fy26 + mb.sga_fy26 : 0;
+      const ibNet = ib ? ib.rev_fy26 + ib.sga_fy26 : 0;
+      if (!inInit) {
+        // Genuinely new bet, included → New Bets column
+        newBetsImpact += mbNet;
+      } else {
+        // Existing bet, included → Reforecast (pure delta from init value)
+        reforecastImpact += mbNet - ibNet;
+      }
+    } else {
+      // March excluded
+      if (inInit) {
+        // Existing bet turned off → Canceled column (negative of init value, if init is included)
+        const ibNet = ib ? ib.rev_fy26 + ib.sga_fy26 : 0;
+        canceledImpact -= ibNet;
+      }
+      // New bet that's excluded → no column impact (was never in Jan either)
+    }
+  }
+
+  // --- 4. Hardcoded CANCELED_BETS (fully removed from march scope) ---
+  for (const n of CANCELED_BETS) {
+    const area = getCanceledArea(n);
+    if (filterArea && area !== filterArea) continue;
+    const ib = initMap[n];
+    if (ib) canceledImpact -= (ib.rev_fy26 + ib.sga_fy26);
+  }
+
+  return { janTotal, newBetsImpact, reforecastImpact, canceledImpact, marchTotal };
+}
+
+const betAreaMap = {};
+MARCH_RAW.forEach(r => { betAreaMap[r.bet_name] = r.area; });
+
+function getCanceledArea(name) {
+  const map = {
+    "Deliver and Execute TTD Training and Playbooks + Coaching to BDs/MDs": "TTD",
+    "Live Nation & Ticketmaster agreement": "Live",
+    "GTM SG&A Europe": "INTL Core Local"
+  };
+  return map[name] || null;
+}
+
+function renderWaterfall(areaKey, canvasId, tableId) {
+  const filterArea = areaKey === 'total' ? null : areaKey === 'HA' ? 'H&A' : areaKey === 'INTL' ? 'INTL Core Local' : areaKey === 'Online' ? 'Online/Retail' : areaKey;
+  const d = computeWaterfallData(filterArea);
+  
+  // Build waterfall bars
+  const labels = ['OP Commitment', 'New Bets', 'Reforecast', 'Canceled/Excluded', 'QF2 Commitment'];
+  const base = [0, d.janTotal, d.janTotal + d.newBetsImpact, d.janTotal + d.newBetsImpact + d.reforecastImpact, 0];
+  const vals = [d.janTotal, d.newBetsImpact, d.reforecastImpact, d.canceledImpact, d.marchTotal];
+  
+  // Floating bar data
+  const data = vals.map((v,i) => {
+    if (i === 0 || i === 4) return [0, v]; // Absolute bars
+    return [base[i], base[i] + v];
+  });
+  
+  const colors = vals.map((v,i) => {
+    if (i === 0 || i === 4) return i === 4 ? '#53a318' : '#1f2937';
+    return v >= 0 ? '#53a31899' : '#dc262699';
+  });
+  const borders = vals.map((v,i) => {
+    if (i === 0 || i === 4) return i === 4 ? '#3d7a12' : '#374151';
+    return v >= 0 ? '#53a318' : '#dc2626';
+  });
+  
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  if (wfCharts[canvasId]) { wfCharts[canvasId].destroy(); }
+  
+  wfCharts[canvasId] = new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: colors,
+        borderColor: borders,
+        borderWidth: 1.5,
+        borderRadius: 3,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {display:false},
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              const [lo, hi] = ctx.raw;
+              const v = hi - lo;
+              const sign = v >= 0 ? '+' : '';
+              return `${sign}${fmt(v)}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: { grid: {display:false} },
+        y: {
+          ticks: { callback: v => fmt(v) },
+          grid: { color: '#f3f4f6' }
+        }
+      }
+    }
+  });
+  
+  // Table
+  const tDiv = document.getElementById(tableId);
+  if (tDiv) {
+    tDiv.innerHTML = `<div class="card" style="margin-top:12px;padding:0;overflow:hidden;">
+      <table>
+        <thead><tr>
+          <th>Driver</th>
+          <th class="num">FY26 Net Impact</th>
+          <th class="num">Cumulative</th>
+          <th>Notes</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>OP Commitment — Baseline</td><td class="num">${fmt(d.janTotal)}</td><td class="num">${fmt(d.janTotal)}</td><td style="font-size:11px;color:var(--gray-500);">Starting point from OP Commitment</td></tr>
+          <tr><td style="color:var(--blue);">➕ Newly Added Bets</td><td class="num ${d.newBetsImpact>=0?'variance-positive':'variance-negative'}">${d.newBetsImpact?fmt(d.newBetsImpact):'–'}</td><td class="num">${fmt(d.janTotal+d.newBetsImpact)}</td><td style="font-size:11px;color:var(--gray-500);">Bets not in OP Commitment</td></tr>
+          <tr><td style="color:${d.reforecastImpact>=0?'var(--grpn-green)':'var(--red)'};">${d.reforecastImpact>=0?'▲':'▼'} Reforecast Impact</td><td class="num ${d.reforecastImpact>=0?'variance-positive':'variance-negative'}">${d.reforecastImpact?fmt(d.reforecastImpact):'–'}</td><td class="num">${fmt(d.janTotal+d.newBetsImpact+d.reforecastImpact)}</td><td style="font-size:11px;color:var(--gray-500);">Existing bets with changed forecasts</td></tr>
+          <tr><td style="color:var(--red);">✕ Canceled / Excluded Bets</td><td class="num ${d.canceledImpact>=0?'variance-positive':'variance-negative'}">${d.canceledImpact?fmt(d.canceledImpact):'–'}</td><td class="num">${fmt(d.janTotal+d.newBetsImpact+d.reforecastImpact+d.canceledImpact)}</td><td style="font-size:11px;color:var(--gray-500);">Removed bets + bets excluded via Settings</td></tr>
+          <tr class="subtotal"><td>QF2 Commitment — Current</td><td class="num" style="color:var(--grpn-green);font-weight:800;">${fmt(d.marchTotal)}</td><td class="num"></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>`;
+  }
+}
+
+function renderAllWaterfalls() {
+  // Only render the currently active waterfall tab to avoid hidden canvas dimension issues
+  const activePanel = document.querySelector('#s6 .tab-panel.active');
+  if (!activePanel) return;
+  const panelId = activePanel.id;
+  const canvasMap = {'wf-total':'chartTotal','wf-AOG':'chartAOG','wf-Coupons':'chartCoupons','wf-HA':'chartHA','wf-HBW':'chartHBW','wf-INTL':'chartINTL','wf-Live':'chartLive','wf-Online':'chartOnline','wf-TTD':'chartTTD','wf-Travel':'chartTravel'};
+  const tableMap = {'wf-total':'wfTableTotal','wf-AOG':'wfTableAOG','wf-Coupons':'wfTableCoupons','wf-HA':'wfTableHA','wf-HBW':'wfTableHBW','wf-INTL':'wfTableINTL','wf-Live':'wfTableLive','wf-Online':'wfTableOnline','wf-TTD':'wfTableTTD','wf-Travel':'wfTableTravel'};
+  const areaMap = {'wf-total':'total','wf-AOG':'AOG','wf-Coupons':'Coupons','wf-HA':'HA','wf-HBW':'HBW','wf-INTL':'INTL','wf-Live':'Live','wf-Online':'Online','wf-TTD':'TTD','wf-Travel':'Travel'};
+  if (canvasMap[panelId]) renderWaterfall(areaMap[panelId], canvasMap[panelId], tableMap[panelId]);
+}
+
+// =============================================
+// RENDER SECTION 5: SETTINGS
+// =============================================
+function renderSettings() {
+  const container = document.getElementById('settingsContainer');
+  if (!container) return;
+  
+  // Group by area
+  const areaGroups = {};
+  allBetNames.forEach(n => {
+    const area = betAreaMap[n] || 'Other';
+    if (!areaGroups[area]) areaGroups[area] = [];
+    areaGroups[area].push(n);
+  });
+  
+  let html = '';
+  // Header row
+  html += `<div style="display:grid;grid-template-columns:1fr 180px 180px;gap:12px;padding:8px 16px;background:var(--gray-800);color:#fff;border-radius:8px 8px 0 0;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0;">
+    <div>Bet Name</div>
+    <div class="settings-col-header" style="color:#9ca3af;text-align:center;">QF2 (Current)</div>
+    <div class="settings-col-header" style="color:#9ca3af;text-align:center;">OP Commitment (Initial)</div>
+  </div>`;
+  
+  for (const area of AREA_ORDER) {
+    const bets = areaGroups[area];
+    if (!bets || bets.length === 0) continue;
+    const color = AREA_COLORS[area] || '#374151';
+    html += `<div class="settings-section">
+      <div class="settings-area-header" onclick="toggleAreaSettings(this)" style="border-left:4px solid ${color};">
+        <span>${area}</span>
+        <span style="font-size:10px;color:#9ca3af;">${bets.length} bets ▾</span>
+      </div>
+      <div class="settings-area-body open">`;
+    
+    for (const bet of bets) {
+      const st = inclState[bet] || {march:true,init:true};
+      const marchInc = st.march;
+      const initInc = st.init;
+      html += `<div class="settings-bet-row" data-bet="${escAttr(bet)}">
+        <div class="settings-bet-name">${bet}</div>
+        <div>
+          <div class="toggle-group">
+            <button class="toggle-btn ${marchInc?'active-include':''}" onclick="setInclude('${escAttr(bet)}','march',true)">Include</button>
+            <button class="toggle-btn ${!marchInc?'active-exclude':''}" onclick="setInclude('${escAttr(bet)}','march',false)">Exclude</button>
+          </div>
+        </div>
+        <div>
+          <div class="toggle-group">
+            <button class="toggle-btn ${initInc?'active-include':''}" onclick="setInclude('${escAttr(bet)}','init',true)">Include</button>
+            <button class="toggle-btn ${!initInc?'active-exclude':''}" onclick="setInclude('${escAttr(bet)}','init',false)">Exclude</button>
+          </div>
+        </div>
+      </div>`;
+    }
+    html += `</div></div>`;
+  }
+  
+  // Canceled bets section
+  html += `<div class="settings-section">
+    <div class="settings-area-header" onclick="toggleAreaSettings(this)" style="border-left:4px solid #dc2626;">
+      <span>Canceled / Removed Bets (OP only)</span>
+      <span style="font-size:10px;color:#9ca3af;">${CANCELED_BETS.length} bets ▾</span>
+    </div>
+    <div class="settings-area-body open">`;
+  for (const bet of CANCELED_BETS) {
+    const st = inclState[bet] || {march:false,init:true};
+    html += `<div class="settings-bet-row" data-bet="${escAttr(bet)}">
+      <div class="settings-bet-name" style="color:var(--gray-500);text-decoration:line-through;">${bet}</div>
+      <div><div class="toggle-group"><button class="toggle-btn" style="cursor:not-allowed;color:var(--gray-300);" disabled>N/A</button></div></div>
+      <div>
+        <div class="toggle-group">
+          <button class="toggle-btn ${st.init?'active-include':''}" onclick="setInclude('${escAttr(bet)}','init',true)">Include</button>
+          <button class="toggle-btn ${!st.init?'active-exclude':''}" onclick="setInclude('${escAttr(bet)}','init',false)">Exclude</button>
+        </div>
+      </div>
+    </div>`;
+  }
+  html += `</div></div>`;
+  
+  // ── Approval Status section
+  html += `<div class="settings-section" style="margin-top:8px;">
+    <div class="settings-area-header" onclick="toggleAreaSettings(this)" style="border-left:4px solid #0ea5e9;background:#0c4a6e;">
+      <span>✅ Approval Status — toggle per bet</span>
+      <span style="font-size:10px;color:#7dd3fc;">affects Approved Only filter ▾</span>
+    </div>
+    <div class="settings-area-body open">
+      <div style="display:grid;grid-template-columns:1fr 120px;gap:12px;padding:7px 16px;background:var(--gray-700);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#d1d5db;">
+        <div>Bet Name</div>
+        <div style="text-align:center;">Approved?</div>
+      </div>`;
+
+  const approvalAreaOrder = [...AREA_ORDER, 'Canceled'];
+  for (const area of approvalAreaOrder) {
+    let betsForArea;
+    if (area === 'Canceled') {
+      betsForArea = CANCELED_BETS;
+    } else {
+      betsForArea = allBetNames.filter(n => betAreaMap[n] === area);
+    }
+    if (!betsForArea || betsForArea.length === 0) continue;
+    const color = AREA_COLORS[area] || '#dc2626';
+    html += `<div style="padding:5px 16px 2px;background:${color}11;font-size:10px;font-weight:700;text-transform:uppercase;color:${color};border-left:3px solid ${color};">${area}</div>`;
+    for (const bet of betsForArea) {
+      const isApproved = (inclState[bet] || {}).approved !== false;
+      const esc = bet.replace(/'/g,"&#39;");
+      html += `<div class="settings-bet-row" style="grid-template-columns:1fr 120px;" data-bet="${esc}">
+        <div class="settings-bet-name">${bet}</div>
+        <div>
+          <div class="toggle-group" style="width:120px;">
+            <button class="toggle-btn ${isApproved?'active-include':''}" onclick="setApproval('${esc}',true)">✓ Approved</button>
+            <button class="toggle-btn ${!isApproved?'active-exclude':''}" onclick="setApproval('${esc}',false)">✕ Pending</button>
+          </div>
+        </div>
+      </div>`;
+    }
+  }
+  html += `</div></div>`;
+
+  container.innerHTML = html;
+}
+
+function setApproval(bet, val) {
+  const name = bet.replace(/&#39;/g,"'");
+  if (!inclState[name]) inclState[name] = {march:true, init:true, approved:val};
+  else inclState[name].approved = val;
+  if (val) APPROVED_BETS.add(name);
+  else APPROVED_BETS.delete(name);
+  renderAll();
+  renderSettings();
+}
+
+function escAttr(s) { return s.replace(/'/g,"&#39;"); }
+
+function setInclude(bet, iter, val) {
+  // Decode HTML entities
+  const name = bet.replace(/&#39;/g,"'");
+  if (!inclState[name]) inclState[name] = {march:true,init:true};
+  inclState[name][iter] = val;
+  renderAll();
+  renderSettings();
+}
+
+function toggleAreaSettings(el) {
+  const body = el.nextElementSibling;
+  body.classList.toggle('open');
+  const arrow = el.querySelector('span:last-child');
+  if (arrow) arrow.textContent = arrow.textContent.includes('▾') ? 
+    arrow.textContent.replace('▾','▴') : arrow.textContent.replace('▴','▾');
+}
+
+// =============================================
+// NAVIGATION & FILTERS
+// =============================================
+function showSection(id) {
+  document.querySelectorAll('.section-tab').forEach(s => s.style.display = 'none');
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'block';
+  document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.remove('active'));
+  event && event.target && event.target.classList.add('active');
+  if (id === 's6') setTimeout(renderAllWaterfalls, 60);
+  if (id === 's5') setTimeout(renderActuals, 60);
+  if (id === 's2') setTimeout(renderQuarterlyChart, 60);
+  if (id === 's1') setTimeout(renderApprovalSummary, 60);
+}
+
+function showWfTab(tabId) {
+  document.querySelectorAll('#s6 .tab-panel').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById(tabId);
+  if (el) el.classList.add('active');
+  document.querySelectorAll('#s6 .section-tabs button').forEach(b => b.classList.remove('active'));
+  event && event.target && event.target.classList.add('active');
+  setTimeout(() => renderAllWaterfalls(), 60);
+}
+
+function setApprovalFilter(v) {
+  approvedFilter = v;
+  document.querySelectorAll('.filter-toggle').forEach(g => {}); // no-op loop
+  document.getElementById('apprAll').classList.toggle('active', v === 'all');
+  document.getElementById('apprApproved').classList.toggle('active', v === 'approved');
+  renderAll();
+}
+
+function setOpFilter(v) {
+  opFilter = v;
+  document.querySelectorAll('.filter-toggle button').forEach(b => b.classList.remove('active'));
+  const btnMap = {all:'opAll', Yes:'opYes', No:'opNo'};
+  const btn = document.getElementById(btnMap[v]);
+  if (btn) btn.classList.add('active');
+  renderAll();
+}
+
+function renderAll() {
+  renderApprovalSummary();
+  renderSummary();
+  renderQuarterlyChart();
+  renderDetail();
+  renderComparison();
+  const s5el = document.getElementById('s5');
+  if (s5el && s5el.style.display !== 'none') renderActuals();
+  const s6el = document.getElementById('s6');
+  if (s6el && s6el.style.display !== 'none') renderAllWaterfalls();
+}
+
+// =============================================
+// INIT
+// =============================================
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('s1').style.display = 'block';
+  renderApprovalSummary();
+  renderAll();
+  renderSettings();
+  document.querySelector('.sidebar nav a').classList.add('active');
+});
+</script>
+</body>
+</html>
